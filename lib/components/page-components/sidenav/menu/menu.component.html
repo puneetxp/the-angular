@@ -1,0 +1,18 @@
+<div class="sticky top-0">
+  <div class="overflow-auto matmd:w-60 border-0 border-r border-black/10 border-solid" *ngIf="(params | async)">
+    <mat-nav-list>
+      <ng-container *ngFor="let menu of menus">
+        <a class="menu" mat-list-item [routerLink]="menu.route" [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="component-viewer-sidenav-item-selected">
+          {{menu.name}}
+        </a>
+        <a ngif="menu.child" class="menu child" mat-list-item *ngFor="let child of menu.child"
+          [routerLinkActiveOptions]="{ exact: false }" [routerLink]="child.route"
+          routerLinkActive="component-viewer-sidenav-item-selected">
+          <mat-icon aria-hidden="false" aria-label="array_left icon h-full" fontIcon="arrow_left"></mat-icon>
+          {{child.name}}
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </div>
+</div>

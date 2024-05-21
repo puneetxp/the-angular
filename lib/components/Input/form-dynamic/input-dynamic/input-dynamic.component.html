@@ -1,0 +1,154 @@
+<div [formGroup]="form" [ngSwitch]="input.controlType">
+  <input *ngSwitchCase="'hidden'" type="text" matInput [formControlName]="input.key" hidden />
+  <mat-form-field *ngSwitchCase="'password'" [ngSwitch]="input.controlType" appearance="fill" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <input matInput [formControlName]="input.key" [type]="hide ? 'password' : 'text'">
+    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
+  </mat-form-field>
+  <mat-form-field *ngSwitchCase="'textbox'" [ngSwitch]="input.controlType" appearance="fill" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <input matInput [type]="input.type" [formControlName]="input.key">
+    <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
+  </mat-form-field>
+  <mat-form-field *ngSwitchCase="'datepicker'" appearance="fill" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <input matInput [matDatepicker]="picker" [formControlName]="input.key">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
+  </mat-form-field>
+  <mat-form-field *ngSwitchCase="'textarea'" [ngSwitch]="input.controlType" appearance="fill" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <textarea matInput #autosize="cdkTextareaAutosize" cdkTextareaAutosize cdkAutosizeMinRows="2" cdkAutosizeMaxRows="6" [formControlName]="input.key"></textarea>
+    <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
+  </mat-form-field>
+  <div *ngSwitchCase="'photo'" [ngClass]="input.class" class="flex justify-center m-2">
+    <div class="w-56 lg:w-64 xl:w-72 aspect-square flex justify-center content-center border border-solid m-auto sm:mx-2
+    py-2 rounded border-gray-800/20" (click)="photo_select()">
+      <input [formControlName]="input.key" class="hidden" />
+      <ng-template [ngIf]="!(input.other.photo==''||!input.other.photo)">
+        <img class="max-w-full max-h-full m-auto" src="{{input.other.photo && input.other.photo.public}}" />
+      </ng-template>
+      <ng-template [ngIf]="input.other.photo==''||!input.other.photo">
+        <p class="text-center flex flex-col-reverse text-lg">
+          Please Select Photo
+        </p>
+      </ng-template>
+    </div>
+  </div>
+  <div *ngSwitchCase="'photo[]'" [ngClass]="input.class" class="flex justify-center m-2">
+    <div [cdkDropListOrientation]="(isScreenSmall | async) ? 'vertical' :'horizontal'" cdkDropList
+      (cdkDropListDropped)="imagedrop($event)" *ngIf="input.other.photos.length > 0"
+      class="flex overflow-y-auto justify-center content-center border border-solid m-auto mx-0 py-2 rounded border-gray-800/20 gap-2"
+      [ngClass]="(isScreenSmall | async) ? 'flex-col' :''" (click)="photos_select()">
+      <div cdkDrag *ngFor="let photoitem of input.other.photos"
+        class="aspect-square flex justify-center content-center max-w-xs max-h-xs">
+        <img class="max-w-full max-h-full m-auto" src="{{photoitem && photoitem.public}}" />
+      </div>
+    </div>
+    <div *ngIf="input.other.photos.length === 0" class="h-56 aspect-square my-2 flex justify-center content-center border border-solid m-auto
+        py-2 rounded border-gray-800/20" (click)="photos_select()">
+      <p class="text-center flex flex-col-reverse text-lg">
+        Please Select Photo
+      </p>
+    </div>
+  </div>
+  <mat-checkbox *ngSwitchCase="'checkbox'" [formControlName]="input.key" class="mx-2"
+    [ngClass]="input.class">{{input.label}}</mat-checkbox>
+  <mat-form-field *ngSwitchCase="'dropdown'" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <mat-select [formControlName]="input.key">
+      <mat-option *ngFor="let opt of input.options" [value]="opt.key">
+        {{opt.value}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
+  </mat-form-field>
+  <mat-form-field *ngSwitchCase="'date'" [ngClass]="input.class">
+    <mat-label>{{input.label}}</mat-label>
+    <input matInput [matDatepicker]="picker">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker">
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-slide-toggle [formControlName]="input.key" *ngSwitchCase="'toggle'"
+    [ngClass]="input.class">Enable</mat-slide-toggle>
+  <div *ngSwitchCase="'dropdownautocomplete'">
+    <input type="text" matInput [formControlName]="input.key" hidden />
+    <mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">
+      <mat-label>{{input.label}}</mat-label>
+      <input type="text" matInput [matAutocomplete]="auto" (input)="onAutochange($event.target)"
+        value="{{(input.value || input.value ==0) && selectoption()}}" />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="AutodisplayFn"
+        (optionSelected)="setForm($event.option.value)">
+        <mat-option *ngFor="let option of autoOptions" [value]="option">
+          {{option.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="'chipselect'">
+    <input matInput [formControlName]="input.key" hidden />
+    <mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">
+      <mat-label>{{input.label}}</mat-label>
+      <mat-chip-grid #chipGrid [attr.aria-label]="input.label">
+        <mat-chip-row *ngFor="let value of values" (removed)="removeselectedOptions(value)">
+          {{value}}
+          <button matChipRemove [attr.aria-label]="'remove ' + value">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-grid>
+      <input [matChipInputFor]="chipGrid" [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="matChipAdd($event)" #InputHTMLFront />
+      <mat-autocomplete #auto="matAutocomplete"
+        (optionSelected)="addselectedOptions($event.option.viewValue.toString())">
+        <mat-option *ngFor="let option of autoOptions" [value]="option.key">
+          {{option.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="'$dropdownautocomplete'">
+    <input type="text" matInput [formControlName]="input.key" hidden />
+    <mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">
+      <mat-label>{{input.label}}</mat-label>
+      <input type="text" matInput [matAutocomplete]="auto" (input)="$onAutochange($event.target)"
+        value="{{input.value && selectoption$()}}" />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="AutodisplayFn"
+        (optionSelected)="setForm($event.option.value)">
+        <mat-option *ngFor="let option of autoOptions" [value]="option">
+          {{option.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div *ngSwitchCase="'$chipselect'">
+    <input matInput [formControlName]="input.key" hidden />
+    <mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">
+      <mat-label>{{input.label}}</mat-label>
+      <mat-chip-grid #chipGrid [attr.aria-label]="input.label">
+        <mat-chip-row *ngFor="let value of values" (removed)="removeselectedOptions(value)">
+          {{value}}
+          <button matChipRemove [attr.aria-label]="'remove ' + value">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-grid>
+      <input [matChipInputFor]="chipGrid" [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="matChipAdd($event)" />
+      <mat-autocomplete #auto="matAutocomplete"
+        (optionSelected)="addselectedOptions($event.option.viewValue.toString())">
+        <mat-option *ngFor="let option of autoOptions" [value]="option.key">
+          {{option.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <the-input-select *ngSwitchCase="'select'" [input]="input" [form]="form" [ngClass]="input.class" />
+</div>

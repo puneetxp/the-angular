@@ -1,0 +1,43 @@
+<mat-sidenav-container class="flex-1">
+  <mat-sidenav #sidenav class="xs:w-56 xm:w-60" *ngIf="(isScreenSmall | async)"
+    [opened]="(isScreenSmall | async) === false" [mode]="(isScreenSmall | async) ? 'over' : 'side'"
+    [fixedInViewport]="(isScreenSmall | async)" [fixedTopGap]="56">
+    <the-menu [params]="params" [menus]=menus></the-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="min-h-full flex flex-col">
+      <the-page-title (toggleSidenav)="toggleSidenav(sidenav)">
+        <button ngClass="!h-full my-auto" *ngIf="(isScreenSmall | async)" mat-button class="sidenav-toggle"
+          (click)="toggleSidenav(sidenav)">
+          <mat-icon class="text-white">menu</mat-icon>
+        </button>
+        <div class="matmd:px-5 w-full flex justify-between">
+          <h1 class="my-auto text-xl">{{active.label}}</h1>
+          <div class="flex">
+            <div class="grid grid-rows-2">
+              <button mat-flat-button class="my-auto !p-0 !h-8 !w-8 !min-w-0" *ngFor="let link of active.links"[routerLink]="link.route" routerLinkActive="mat-mdc-raised-button" color="primary">
+                <mat-icon class="text-white !h-8 !w-4 text-2xl self-center !m-auto">{{link.label}}</mat-icon>
+              </button>
+            </div>
+            <button mat-button *ngIf="active.child" class="!h-full my-auto !p-0"
+              [routerLink]="router.url !== active.route ? active.route : active.child[0].route">
+              <mat-icon class="text-white !h-9 !w-9 !text-3xl self-center !m-auto">{{router.url !== active.route ? "arrow_back" : "add"}}</mat-icon>
+            </button>
+          </div>
+        </div>
+      </the-page-title>
+      <div class="flex flex-col grow">
+        <!-- If on small screen, menu resides in drawer -->
+        <main class="flex flex-auto">
+          <!-- If on large screen, menu resides to left of content -->
+          <the-menu *ngIf="(isScreenSmall | async) === false" class="" [params]="params" [menus]=menus>
+          </the-menu>
+          <div class="w-full overflow-scroll">
+            <router-outlet></router-outlet>
+          </div>
+        </main>
+        <the-footer class="my-0"></the-footer>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

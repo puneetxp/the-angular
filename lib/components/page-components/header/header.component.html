@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="justify-between nav mat-elevation-z6">
+    <div>
+        <a routerLink="/" routerLinkActive="button-active" mat-flat-button color="primary">
+            <img alt="Intaxing Logo" class="w-10" src="assets/my_icon/intaxing-new-white.svg">
+        </a>
+    </div>
+    <div class="grow"></div>
+    <ng-container *ngIf="getLogin; then login_container else logout_container"></ng-container>
+    <ng-template #login_container>
+        <div>
+            <button [matMenuTriggerFor]="logmenu" mat-icon-button class="person-icon"
+                aria-label="person-button with person icon">
+                <mat-icon>person</mat-icon>
+            </button>
+            <mat-menu #logmenu="matMenu">
+                <span *ngFor="let item of DropMenuItem | keyvalue">
+                    <button [routerLink]="item.value" mat-menu-item>
+                        {{item.key}}
+                    </button>
+                </span>
+                <button mat-menu-item (click)="logout()">LogOut</button>
+            </mat-menu>
+        </div>
+    </ng-template>
+    <ng-template #logout_container>
+        <div>
+            <button routerLink="/login" routerLinkActive="button-active" mat-icon-button class="person-icon"
+                aria-label="person-button with person icon">
+                <mat-icon>person</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</mat-toolbar>

@@ -1,0 +1,47 @@
+<!-- Select File -->
+<div class="p-2">
+  <form (ngSubmit)="upload($event)" [action]="action" method="post" enctype="multipart/form-data">
+    <mat-form-field class="w-full" [ngClass]="diredit ? '': 'hidden'">
+      <mat-label>Directory</mat-label>
+      <input class="w-full" name="dir" matInput [(ngModel)]="directory" />
+    </mat-form-field>
+    <mat-form-field *ngFor="let input of additional | keyvalue" class='hidden'>
+      <mat-label>{{input.key}}</mat-label>
+      <input class="w-full" [name]="input.key" matInput [(ngModel)]="input.value" />
+    </mat-form-field>
+    <div class="m-2 p-2" fileDragDrop (filesChangeEmiter)="dragevent($event)">
+      <div class="flex justify-center content-center min-h-56">
+        <div class="m-auto">
+          <input #input hidden type="file" id="file" (change)="inputevent($event)" />
+          <button type="button" mat-raised-button color="primary" (click)="fileshow()">
+            <mat-icon>
+              publish
+            </mat-icon>
+            Select Files
+          </button>
+          <button [ngClass]="Array.from(photos.files).length>0 ?'':'hidden'" type="button" mat-raised-button
+            color="accent" (click)="reset()"><mat-icon class="m-auto">autorenew</mat-icon></button>
+        </div>
+      </div>
+      <div [ngClass]="Array.from(photos.files).length>0 ?'mt-3':'hidden'">
+        <div class="flex content-center justify-center">
+          <div class="relative h-56" *ngFor="let photo of Array.from(photos.files); index as i;">
+            <img class="max-h-full max-w-full h-56" [src]="Image_Service.imgtourl(photo)" />
+            <div class="opacity-0 hover:opacity-100 absolute bottom-0 w-full h-full gird">
+              <div class="flex justify-center content-end h-full items-end">
+                <button type="button" mat-raised-button color="warn" (click)="removeimage(i)"><mat-icon
+                    class="m-auto">delete</mat-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 flex justify-center">
+          <button type="submit" class="text-xl font-bold" mat-raised-button color="primary">
+            {{SubmitTxt}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- complete -->

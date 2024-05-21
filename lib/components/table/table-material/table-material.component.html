@@ -1,0 +1,70 @@
+<div *ngIf="dataSource.data.length > 0 else nodata">
+  <mat-form-field *ngIf="isfilter" class="w-full mt-2">
+    <mat-label>Filter</mat-label>
+    <input matInput [(ngModel)]="dataSource.filter" (keyup)="MatTable()" placeholder="Ex. ium" #input class="w-full">
+  </mat-form-field>
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows
+    class="mat-elevation-z2 w-full overflow-scroll">
+    <ng-container matColumnDef="photo_id">
+      <th mat-header-cell *matHeaderCellDef> Photo </th>
+      <td mat-cell *matCellDef="let element"> <img class="h-10 w-10 p-1 pb-0" [src]="(photos.find(element.photo_id) | async)?.public" /> </td>
+    </ng-container>
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplayfilter">
+      <th mat-header-cell *matHeaderCellDef class="capitalize" mat-sort-header> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+    <ng-component *ngIf="isexpand; else noexpend">
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button *ngIf="isEdit" mat-icon-button (click)="edit.emit(element)">
+            <mat-icon color="accent">edit</mat-icon>
+          </button>
+          <button *ngIf="isDelete" mat-icon-button (click)="delete.emit(element)">
+            <mat-icon color="warn">delete_forever</mat-icon>
+          </button>
+          <button *ngIf="isexpandSwitch" mat-icon-button aria-label="expand row" (click)="(elementselected === element ? select(null) : select(element)); 
+          $event.stopPropagation()">
+            <mat-icon *ngIf="elementselected !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="elementselected === element">keyboard_arrow_up</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div class="flex overflow-hidden" [ngClass]="element === elementselected ? 'w-full' : 'w-0'"
+            [@detailExpand]="element === elementselected ? 'expanded' : 'collapsed'">
+            <ng-template *ngIf="element === elementselected" [cdkPortalOutlet]="templatePortal">
+            </ng-template>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+        [class.example-expanded-row]="elementselected === element"
+        (click)="(elementselected === element ? select(null) : select(element))">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </ng-component>
+    <ng-template #noexpend>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" (click)="select(row)"></tr>
+    </ng-template>
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{dataSource.filter}}"</td>
+    </tr>
+  </table>
+  <mat-paginator *ngIf="dataSource.data.length > 10 && isPaginate" [pageSize]="PageSize"
+    [pageSizeOptions]="[5,10,25,50,100]" aria-label="Paginator"></mat-paginator>
+</div>
+<ng-template #nodata>
+  <h3 class="m-3 text-center" *ngIf="isNodata else nothing">
+    There is No Data Available
+  </h3>
+  <ng-template #nothing></ng-template>
+</ng-template>
+<ng-template #templatePortalContent>
+  <ng-content />
+</ng-template>

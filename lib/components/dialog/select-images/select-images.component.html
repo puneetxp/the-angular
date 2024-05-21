@@ -1,0 +1,44 @@
+<h2 mat-dialog-title class="text-center text-2xl">Select Image <button type="button" class="ml-2" mat-raised-button color="accent"
+        (click)="upload()"><mat-icon class="m-auto">add</mat-icon></button></h2>
+<div *ngIf="delid" class="fixed w-full inset-0 z-50 delete" (dragover)="delhover($event)"
+    (dragleave)="delhoverleave($event)" (drop)="delimg($event)">
+</div>
+<mat-dialog-content class="mat-typography">
+    <div [ngClass]="selected.length>0 ?'mt-3':'hidden'">
+        <div cdkDropList class="flex gap-2" cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="imagedrop($event)">
+            <div cdkDrag class="relative w-40" *ngFor="let photo of selected">
+                <div class="aspect-square flex justify-center content-center">
+                    <img class="max-h-full max-w-full m-auto" [src]="photo.public" />
+                </div>
+                <div class="opacity-0 hover:opacity-100 absolute bottom-0 w-full h-full gird">
+                    <div class="flex justify-center content-end h-full items-end">
+                        <button type="button" mat-raised-button color="warn" (click)="removeselected(photo)"><mat-icon
+                                class="m-auto">delete</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 flex justify-center">
+            <button type="submit" class="text-xl font-bold" (click)="proceed()" mat-raised-button color="primary">
+                Proceed
+            </button>
+        </div>
+    </div>
+    <mat-form-field class="w-full mt-2">
+        <mat-label>Filter</mat-label>
+        <input matInput [(ngModel)]="filter" (keyup)="runfilter()" placeholder="Ex. ium" #input class="w-full">
+    </mat-form-field>
+    <div class="flex gap-0 sm:gap-2 justify-center flex-wrap">
+        <div *ngFor="let photo of runfilter() | async">
+            <div class="grid w-52">
+                <div (click)="select(photo)"
+                    class="w-52 aspect-square flex justify-center content-center border border-solid border-gray-800/20 bg-fuchsia-400">
+                    <img [draggable]="true" loading="lazy" (dragstart)="setdel(photo.id)" (dragend)="setdel(undefined)"
+                        class="max-w-full max-h-full m-auto" src="{{photo.public}}" />
+                </div>
+                <div class="text-center my-1 mb-2">{{photo.name}}</div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

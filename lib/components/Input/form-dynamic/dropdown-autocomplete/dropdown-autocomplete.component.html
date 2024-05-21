@@ -1,0 +1,14 @@
+<mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">
+  <mat-label>{{label}}</mat-label>
+  <input type="text" matInput [matAutocomplete]="auto" (focusout)="check($event)" [value]="input.name || ''"
+    (input)="filter = $any($event.target).value" />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="AutodisplayFn"
+    (optionSelected)="setForm($event.option.value)">
+    <ng-container *ngFor="let option of option">
+      <mat-option *ngIf="option[value].toString().toLowerCase().includes(filter?.toString()?.toLowerCase() || '')"
+        [value]="{key:option[key], value:option[value]}">
+        {{option.name}}
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</mat-form-field>

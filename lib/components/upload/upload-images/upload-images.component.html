@@ -1,0 +1,54 @@
+<!-- Select File -->
+<div class="p-2">
+  <form (ngSubmit)="upload($event)" action="/api/isuper/photo" method="PUT">
+    <mat-form-field class="w-full" [ngClass]="diredit ? '': '!hidden'"
+      [ngClass]="DialogPhotoUpload!.directory ? '!hidden': ''">
+      <mat-label>Directory</mat-label>
+      <input class="w-full" name="dir" matInput [(ngModel)]="DialogPhotoUpload!.directory" />
+    </mat-form-field>
+    <div *ngIf="DialogPhotoUpload!.directory.length >0" class="m-2 relative max-h-96 overflow-auto" fileDragDrop
+      (filesChangeEmiter)="dragevent($event)">
+      <div class="absolute w-full h-full flex justify-center content-center gap-2 align-middle flex-col"
+        [ngClass]="progress == 0 ? 'hidden' :'z-20'">
+        <h2 class="text-center">Progess</h2>
+        <div class="mx-auto">
+          <mat-progress-spinner class="example-margin" [color]="'primary'" [mode]="'determinate'" [value]="progress">
+          </mat-progress-spinner>
+        </div>
+      </div>
+      <div [ngClass]="progress == 0 ? '' :'blur-lg'">
+        <div class="flex p-2 justify-center content-center min-h-56">
+          <div class="m-auto">
+            <input hidden type="file" accept="image/*" id="file" (change)="inputevent($event)" multiple />
+            <button type="button" mat-raised-button color="primary"
+              onclick="document.querySelector('input#file').click()">
+              <mat-icon>
+                publish
+              </mat-icon>
+              Select Files
+            </button>
+          </div>
+        </div>
+        <div [ngClass]="Array.from(photos.files).length>0 ?'mt-3':'hidden'">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div class="relative" *ngFor="let photo of Array.from(photos.files); index as i;">
+              <img class="max-h-full max-w-full" [src]="ImageService.imgtourl(photo)" />
+              <div class="opacity-0 hover:opacity-100 absolute bottom-0 w-full h-full gird">
+                <div class="flex justify-center content-end h-full items-end">
+                  <button type="button" mat-raised-button color="warn" (click)="removeimage(i)"><mat-icon
+                      class="m-auto">delete</mat-icon></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 flex justify-center">
+            <button type="submit" class="text-xl font-bold" mat-raised-button color="primary">
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- complete -->
