@@ -1,0 +1,27 @@
+{
+  "name": "the-angular",
+  "version": "0.0.2",
+  "description": "Angular The Lib of The Framework",
+  "main": "intex.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puneetxp/the-angular.git"
+  },
+  "keywords": [
+    "Angular",
+    "Lib",
+    "The"
+  ],
+  "author": "puneet sharma",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/puneetxp/the-angular/issues"
+  },
+  "homepage": "https://github.com/puneetxp/the-angular#readme"
+}
