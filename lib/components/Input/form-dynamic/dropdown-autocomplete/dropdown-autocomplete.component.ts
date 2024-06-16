@@ -1,9 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatOption } from '@angular/material/core';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { NgClass, NgFor, NgIf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 
 @Component({
-  selector: 'the-dropdown-autocomplete',
-  templateUrl: './dropdown-autocomplete.component.html',
-  styleUrls: ['./dropdown-autocomplete.component.scss']
+    selector: 'the-dropdown-autocomplete',
+    templateUrl: './dropdown-autocomplete.component.html',
+    styleUrls: ['./dropdown-autocomplete.component.scss'],
+    standalone: true,
+    imports: [MatFormField, NgClass, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, NgFor, NgIf, MatOption]
 })
 export class DropdownAutocompleteComponent implements OnInit {
   filter!: string;

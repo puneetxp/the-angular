@@ -5,6 +5,8 @@ import { Select, Store } from "@ngxs/store";
 import { map, Observable, throwError } from "rxjs";
 import { Login } from "../interface/Login";
 import { DeleteLogin, SetLogin } from "../ngxs/Login.action";
+import { FormDataService } from "./Form/FormData.service";
+import { domain } from "../breakpoint";
 
 export interface loginform {
   name: string;
@@ -26,7 +28,7 @@ export class LoginService {
   login: Login | false = false
   logcheck(): void {
     this.http.get<Login>(
-      "/api/login",
+      domain + "/api/login",
     ).subscribe({
       next: (j) => {
         this.store.dispatch(new SetLogin(j));
@@ -45,7 +47,7 @@ export class LoginService {
     }));
   }
   logout(): void {
-    this.http.get<string>("/api/logout").subscribe(
+    this.http.get<string>(domain + "/api/logout").subscribe(
       {
         next: () => this.store.dispatch(new DeleteLogin()).subscribe(() => this.router.navigate(["/login"], {
           queryParams: { returnUrl: this.router.url },

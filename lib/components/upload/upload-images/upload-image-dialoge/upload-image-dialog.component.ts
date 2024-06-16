@@ -1,20 +1,31 @@
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngxs/store';
 import { DialogPhotoUpload } from 'the-angular/lib/interface/DialogPhotoUpload';
 import { FormDataService } from 'the-angular/lib/service/Form/FormData.service';
 import { ImageService } from 'the-angular/lib/service/image.service';
 import { LoginService } from 'the-angular/lib/service/login.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { FileDragNDropDirective } from '../../../directive/file-drag-drop';
+import { MatInput } from '@angular/material/input';
+import { NgClass, NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'the-upload-dialog',
-  templateUrl: './upload-image-dialog.component.html',
-  styleUrls: ['./upload-image-dialog.component.scss'],
-  host: {
-    class: "w-full"
-  }
+    selector: 'the-upload-dialog',
+    templateUrl: './upload-image-dialog.component.html',
+    styleUrls: ['./upload-image-dialog.component.scss'],
+    host: {
+        class: "w-full"
+    },
+    standalone: true,
+    imports: [ReactiveFormsModule, FormsModule, MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, NgClass, MatLabel, MatInput, NgIf, FileDragNDropDirective, MatProgressSpinner, MatButton, MatIcon, NgFor, MatDialogActions, MatDialogClose]
 })
 export class UploadImageDialog {
   constructor(

@@ -2,18 +2,18 @@ import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { LoginService } from '../login.service';
+import { domain } from 'the-angular/lib/breakpoint';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormJsonService {
-
   constructor(private http: HttpClient, private login: LoginService) { }
   method = "GET";
   action!: string;
   formJson: Record<string, any> = {};
   get<T>(url: string, json: Record<string, any> = {}) {
-    return this.http.get<T>(url + "?" + (new URLSearchParams(json).toString()));
+    return this.http.get<T>( domain + url + "?" + (new URLSearchParams(json).toString()));
   }
   reset() {
     this.formJson = {};

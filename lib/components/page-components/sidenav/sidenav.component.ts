@@ -1,20 +1,28 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 import { map, Observable, Subscription, combineLatest } from 'rxjs';
 import { NavigationFocusService } from './navigation-focus/navigation-focus.service';
-import { MatDrawerToggleResult, MatSidenav } from '@angular/material/sidenav';
+import { MatDrawerToggleResult, MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Menu } from 'the-angular/lib/interface/Menu';
+import { FooterComponent } from '../footer/footer.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { PageTitleComponent } from '../page-title/page-title.component';
+import { MenuComponent } from './menu/menu.component';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
 
 const EXTRA_SMALL_WIDTH_BREAKPOINT = 600;
 const SMALL_WIDTH_BREAKPOINT = 959;
 @Component({
-  selector: 'the-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.sass'],
-  host: {
-    class: 'flex flex-1'
-  }
+    selector: 'the-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrls: ['./sidenav.component.sass'],
+    host: {
+        class: 'flex flex-1'
+    },
+    standalone: true,
+    imports: [MatSidenavContainer, NgIf, MatSidenav, MenuComponent, MatSidenavContent, PageTitleComponent, MatButton, NgClass, MatIcon, NgFor, RouterLinkActive, RouterLink, RouterOutlet, FooterComponent, AsyncPipe]
 })
 export class SidenavComponent implements OnInit {
 

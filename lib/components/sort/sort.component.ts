@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
+import { NgFor } from '@angular/common';
+import { MatTabNav, MatTabLink, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
-  selector: 'the-sort',
-  templateUrl: './sort.component.html',
-  styleUrls: ['./sort.component.css']
+    selector: 'the-sort',
+    templateUrl: './sort.component.html',
+    styleUrls: ['./sort.component.css'],
+    standalone: true,
+    imports: [MatTabNav, NgFor, MatTabLink, RouterLinkActive, RouterLink, MatTabNavPanel, RouterOutlet]
 })
 export class SortComponent implements OnInit {
 

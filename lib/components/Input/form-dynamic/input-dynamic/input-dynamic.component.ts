@@ -1,21 +1,35 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { map } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { WIDTH_BREAK } from 'the-angular/lib/breakpoint';
 import { FormBase } from 'the-angular/lib/interface/form-base';
 import { DialogService } from 'the-angular/lib/service/Dialog.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Photo } from 'src/app/shared/Interface/Model/Photo';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import { option, SelectOptions } from 'the-angular/lib/service/Form/Option';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgSwitch, NgSwitchCase, NgClass, NgIf, NgFor } from '@angular/common';
+import { InputSelectComponent } from '../input-select/input-select.component';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatFormField, MatLabel, MatSuffix, MatError, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 @Component({
-  selector: 'the-input-dynamic',
-  templateUrl: './input-dynamic.component.html',
-  styleUrls: ['./input-dynamic.component.sass']
+    selector: 'the-input-dynamic',
+    templateUrl: './input-dynamic.component.html',
+    styleUrls: ['./input-dynamic.component.sass'],
+    standalone: true,
+    imports: [ReactiveFormsModule, NgSwitch, NgSwitchCase, MatInput, MatFormField, NgClass, MatLabel, MatIconButton, MatSuffix, MatIcon, NgIf, MatError, MatDatepickerInput, MatDatepickerToggle, MatDatepicker, CdkTextareaAutosize, CdkDropList, NgFor, CdkDrag, MatCheckbox, MatSelect, MatOption, MatHint, MatSlideToggle, MatAutocompleteTrigger, MatAutocomplete, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput, InputSelectComponent, AsyncPipe]
 })
 export class InputDynamicComponent implements OnInit {
   constructor(public mydialog: DialogService, breakpoints: BreakpointObserver, private asyncpip: AsyncPipe) {

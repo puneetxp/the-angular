@@ -1,11 +1,18 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormBase } from 'the-angular/lib/interface/form-base';
 import { DynamicFormControlService } from 'the-angular/lib/service/Dynamic-form-control.service';
+import { MatDialogActions } from '@angular/material/dialog';
+import { MatButton } from '@angular/material/button';
+import { InputDynamicComponent } from './input-dynamic/input-dynamic.component';
+import { NgClass, NgFor, NgIf } from '@angular/common';
+import { MatCard, MatCardActions } from '@angular/material/card';
 @Component({
-  selector: 'the-form-dynamic',
-  templateUrl: './form-dynamic.component.html',
-  providers: [DynamicFormControlService]
+    selector: 'the-form-dynamic',
+    templateUrl: './form-dynamic.component.html',
+    providers: [DynamicFormControlService],
+    standalone: true,
+    imports: [MatCard, NgClass, ReactiveFormsModule, NgFor, NgIf, InputDynamicComponent, MatCardActions, MatButton, MatDialogActions]
 })
 export class FormDynamicComponent implements OnInit {
   @Input() head = '';

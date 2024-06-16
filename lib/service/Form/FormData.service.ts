@@ -4,6 +4,7 @@ import { Observable, catchError, map, throwError } from 'rxjs';
 import { LoginService } from '../login.service';
 import { HttpHeaders } from '@angular/common/http';
 import { remove_empty } from 'the-angular/lib/function/Form';
+import { domain } from 'the-angular/lib/breakpoint';
 @Injectable({
   providedIn: 'root'
 })
@@ -82,7 +83,7 @@ export class FormDataService {
   }
   Req<T>(method?: string, url?: string, json?: Record<string, any>, checklogin?: boolean): Observable<T> {
     method && (this.method = method);
-    url && (this.action = url);
+    url && (this.action = domain + url);
     json && this.Json(json);
     this.method == "get" && (this.formData = new FormData());
     this.php();

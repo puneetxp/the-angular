@@ -1,9 +1,13 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { ConfirmDialogData } from 'the-angular/lib/interface/Confirm';
+import { MatButton } from '@angular/material/button';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 @Component({
-  selector: 'the-confirm',
-  templateUrl: './confirm.component.html'
+    selector: 'the-confirm',
+    templateUrl: './confirm.component.html',
+    standalone: true,
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ConfirmComponent {
   constructor(

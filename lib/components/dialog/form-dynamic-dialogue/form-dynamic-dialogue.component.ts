@@ -1,10 +1,27 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogActions } from '@angular/material/dialog';
 import { DynamicFormControlService } from 'the-angular/lib/service/Dynamic-form-control.service';
+import { MatButton } from '@angular/material/button';
+import { InputDynamicComponent } from '../../Input/form-dynamic/input-dynamic/input-dynamic.component';
+import { NgClass, NgFor, NgIf } from '@angular/common';
+import { MatCard, MatCardHeader, MatCardTitle } from '@angular/material/card';
 @Component({
-  selector: 'form-dynamic-dialogue',
-  templateUrl: './form-dynamic-dialogue.component.html',
+    selector: 'form-dynamic-dialogue',
+    templateUrl: './form-dynamic-dialogue.component.html',
+    standalone: true,
+    imports: [
+        MatCard,
+        NgClass,
+        MatCardHeader,
+        MatCardTitle,
+        ReactiveFormsModule,
+        NgFor,
+        NgIf,
+        InputDynamicComponent,
+        MatDialogActions,
+        MatButton,
+    ],
 })
 export class FormDynamicDialogueComponent implements OnInit {
   binding: Record<string, Record<string, (i: any) => any>> = {};

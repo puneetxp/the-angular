@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'array'
+    name: 'array',
+    standalone: true
 })
 export class ArrayPipe implements PipeTransform {
 
@@ -14,7 +15,8 @@ export class ArrayPipe implements PipeTransform {
 
 }
 @Pipe({
-  name: 'falsepipe'
+    name: 'falsepipe',
+    standalone: true
 })
 export class falsePipe implements PipeTransform {
 

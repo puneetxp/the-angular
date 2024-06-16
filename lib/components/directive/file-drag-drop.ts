@@ -7,7 +7,8 @@ import {
 } from "@angular/core";
 
 @Directive({
-  selector: "[fileDragDrop]",
+    selector: "[fileDragDrop]",
+    standalone: true,
 })
 export class FileDragNDropDirective {
   //@Input() private allowed_extensions : Array<string> = ['png', 'jpg', 'bmp'];

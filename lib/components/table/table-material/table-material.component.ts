@@ -1,28 +1,65 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { TemplatePortal } from '@angular/cdk/portal';
+import { TemplatePortal, CdkPortalOutlet } from '@angular/cdk/portal';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatTableDataSource, MatTable as MatTable_1, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { PhotoService } from 'src/app/shared/Service/Model/Photo.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { ɵEmptyOutletComponent } from '@angular/router';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'the-table-material',
-  templateUrl: './table-material.component.html',
-  styleUrls: ['./table-material.component.sass'],
-  host: {
-    class: "w-full",
-  },
-  animations: [
-    trigger("detailExpand", [
-      state("collapsed", style({ height: "0px", minHeight: "0" })),
-      state("expanded", style({ height: "*" })),
-      transition("expanded <=> collapsed", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
-    ]),
-  ],
+    selector: 'the-table-material',
+    templateUrl: './table-material.component.html',
+    styleUrls: ['./table-material.component.sass'],
+    host: {
+        class: "w-full",
+    },
+    animations: [
+        trigger("detailExpand", [
+            state("collapsed", style({ height: "0px", minHeight: "0" })),
+            state("expanded", style({ height: "*" })),
+            transition("expanded <=> collapsed", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
+        ]),
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        FormsModule,
+        MatTable_1,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        NgFor,
+        MatSortHeader,
+        ɵEmptyOutletComponent,
+        MatIconButton,
+        MatIcon,
+        NgClass,
+        CdkPortalOutlet,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatNoDataRow,
+        MatPaginator,
+        AsyncPipe,
+    ],
 })
 export class TableMaterialComponent implements OnInit {
   @Input() columnsToDisplay!: string[];
