@@ -1,6 +1,6 @@
 {
   "name": "the-angular",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Angular The Lib of The Framework",
   "main": "intex.ts",
   "directories": {
