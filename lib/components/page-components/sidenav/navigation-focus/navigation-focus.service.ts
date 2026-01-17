@@ -1,12 +1,13 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Event, NavigationEnd, Router } from '@angular/router';
+import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter, skip } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class NavigationFocusService implements OnDestroy {
+  private readonly router = inject(Router);
   private subscriptions = new Subscription();
   private navigationFocusRequests: HTMLElement[] = [];
   private skipLinkFocusRequests: HTMLElement[] = [];
@@ -16,7 +17,7 @@ export class NavigationFocusService implements OnDestroy {
     .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd));
   readonly softNavigations = this.navigationEndEvents.pipe(skip(1));
 
-  constructor(private router: Router) {
+  constructor() {
     this.subscriptions.add(this.softNavigations.subscribe(() => {
       // focus if url does not have fragment
       if (!this.router.url.split('#')[1]) {
