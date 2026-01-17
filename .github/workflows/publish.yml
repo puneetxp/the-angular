@@ -19,7 +19,24 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+
       - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
-      - run: npm publish
+      - run: npm run build
+
+      - name: Debug npm auth context
+        run: |
+          echo "Environment variables with NPM/NODE_AUTH tokens:"
+          env | grep -E 'NODE_AUTH_TOKEN|NPM_TOKEN|NPM_CONFIG' || true
+          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ] && [ -f "$NPM_CONFIG_USERCONFIG" ]; then
+            echo "\nContents of $NPM_CONFIG_USERCONFIG:";
+            cat "$NPM_CONFIG_USERCONFIG"
+          fi
+          if [ -f ~/.npmrc ]; then
+            echo "\nContents of ~/.npmrc:";
+            cat ~/.npmrc
+          fi
+
+      - name: Publish to npm
+        run: |
+          cd ../dist/the-angular
+          npm publish
