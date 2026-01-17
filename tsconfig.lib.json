@@ -4,9 +4,13 @@
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["ES2022", "DOM"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
+    "inlineSourceMap": true,
     "types": ["google.accounts"],
     "outDir": "../dist/out-tsc/the-angular"
   },

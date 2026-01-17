@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { State, Selector, Action, StateContext } from "@ngxs/store";
 import { Login } from "../interface/Login";
 import { SetLogin, DeleteLogin } from "./Login.action";
@@ -10,7 +9,6 @@ import { SetLogin, DeleteLogin } from "./Login.action";
 })
 @Injectable()
 export class LoginState {
-    constructor() { Router }
     @Selector()
     static getLogin(state: Login) {
       return state;

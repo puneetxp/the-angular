@@ -16,7 +16,10 @@
     "types": [],
     "lib": ["ES2022", "DOM"]
   },
-  "files": [],
-  "include": [],
+  "include": [
+    "public-api.ts",
+    "index.ts",
+    "lib/**/*.ts"
+  ],
   "references": []
 }

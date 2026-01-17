@@ -28,6 +28,7 @@ export * from './lib/module/angularx-social-login-master/projects/lib/src/direct
 export * from './lib/module/angularx-social-login-master/projects/lib/src/entities/load.script';
 export * from './lib/module/angularx-social-login-master/projects/lib/src/public-api';
 export * from './lib/ngxs/Login.action';
+export * from './lib/ngxs/Login.state';
 export * from './lib/public/not-found/not-found.component';
 export * from './lib/public/not-allowed/not-allowed.component';
 export * from './lib/service/Dialog.service';
