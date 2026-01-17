@@ -4,16 +4,20 @@
   </mat-card-header>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <div [ngClass]="formClass">
-      <ng-container *ngFor="let input of data.inputs">
-        <the-input-dynamic *ngIf="!input.other.slider" [input]="input" [ngClass]="input.row" [form]="form" />
-      </ng-container>
+      @for (input of data.inputs; track input) {
+        @if (!input.other.slider) {
+          <the-input-dynamic [input]="input" [ngClass]="input.row" [form]="form" />
+        }
+      }
     </div>
     <ng-content></ng-content>
     <mat-dialog-actions align="end">
       <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
-      <button *ngIf="isReset" mat-raised-button color="accent" type="reset">Reset</button>
+      @if (isReset) {
+        <button mat-raised-button color="accent" type="reset">Reset</button>
+      }
       <button mat-raised-button type="submit" color="primary" [ngClass]="SubmitClass"
-        [disabled]="!isSubmitCheck || !form.valid">{{Submit}}</button>
+      [disabled]="!isSubmitCheck || !form.valid">{{Submit}}</button>
     </mat-dialog-actions>
   </form>
 </mat-card>

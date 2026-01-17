@@ -1,4 +1,54 @@
-<the-header [DropMenu]="DropMenu" class="mat-elevation-z6" />
-<div class="overflow-auto flex flex-col mt-14 flex-1">
+<mat-sidenav-container class="example-container min-h-screen">
+  <mat-sidenav #drawer mode="over" class="!p-5" [fixedInViewport]="true" [fixedTopGap]="0">
+    <div tabindex="-1" style="pointer-events: auto;">
+      <a routerLink="/" class="flex items-center" routerLinkActive="button-active" mat-flat-button>
+        <img alt="Rentzoma Logo" class="w-24" src="assets/my_icon/intaxing-new-white.svg" />
+      </a>
+      <div class="mt-8 flex flex-col space-y-4">
+        <a routerLink="/" class="text-lg font-medium text-white" (click)="drawer.close()">
+          Home
+        </a>
+        <a routerLink="/services" class="text-lg font-medium text-white" (click)="drawer.close()">
+          Services
+        </a>
+        <a routerLink="/services/tax" class="ml-4 text-sm text-white/90" (click)="drawer.close()">GST
+          Services
+        </a>
+        <a routerLink="/services/tax" class="ml-4 text-sm text-white/90" (click)="drawer.close()">
+          Income Tax
+        </a>
+        <a routerLink="/services/web-development" class="ml-4 text-sm text-white/90" (click)="drawer.close()">
+          Web Development
+        </a>
+        <a routerLink="/services/ecommerce" class="ml-4 text-sm text-white/90" (click)="drawer.close()">
+          E-Commerce
+        </a>
+        <a routerLink="/about-us" class="text-lg font-medium text-white" (click)="drawer.close()">
+          About
+        </a>
+        <a routerLink="/contact" class="text-lg font-medium text-white" (click)="drawer.close()">
+          Contact
+        </a>
+        @for (item of DropMenuItem | keyvalue; track item) {
+        <a [routerLink]="item.value" class="ml-4 text-sm font-medium text-white" (click)="drawer.close()">
+          {{item.key}}
+        </a>
+        }
+        <a routerLink="/contact"
+          class="bg-gradient-accent shadow-button hover:shadow-button-hover mt-4 rounded px-4 py-3 text-center font-medium text-white transition-all duration-300 hover:-translate-y-0.5">
+          Raise Inquiry
+        </a>
+      </div>
+      <div
+        class="!absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        <button (click)="drawer.toggle()" matMiniFab>
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-sidenav>
+  <the-header [DropMenu]="DropMenu" (drawerx)="drawer.toggle()" class="mat-elevation-z6" />
+  <div class="overflow-auto flex flex-col mt-14 min-h-[calc(100vh - 56px)]">
     <router-outlet></router-outlet>
-</div>
+  </div>
+</mat-sidenav-container>

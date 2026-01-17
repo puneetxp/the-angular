@@ -1,7 +1,7 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {Event, NavigationEnd, Router} from '@angular/router';
-import {filter, skip} from 'rxjs/operators';
-import {Subscription} from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Event, NavigationEnd, Router } from '@angular/router';
+import { filter, skip } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class NavigationFocusService implements OnDestroy {
         setTimeout(() => {
           if (this.navigationFocusRequests.length) {
             this.navigationFocusRequests[this.navigationFocusRequests.length - 1]
-              .focus({preventScroll: true});
+              .focus({ preventScroll: true });
           }
         }, 100);
       }

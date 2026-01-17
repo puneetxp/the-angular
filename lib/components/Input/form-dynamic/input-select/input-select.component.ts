@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormBase } from 'the-angular/lib/interface/form-base';
+import { FormBase } from '../../../../interface/form-base';
 import { MatOption } from '@angular/material/core';
-import { NgFor } from '@angular/common';
+
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -11,8 +11,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
     selector: 'the-input-select',
     templateUrl: './input-select.component.html',
     styleUrls: ['./input-select.component.sass'],
-    standalone: true,
-    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, NgFor, MatOption]
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatOption]
 })
 export class InputSelectComponent implements OnInit {
   @Input({ required: true }) input!: FormBase<string>;

@@ -1,27 +1,28 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogActions } from '@angular/material/dialog';
-import { DynamicFormControlService } from 'the-angular/lib/service/Dynamic-form-control.service';
+import { DynamicFormControlService } from '../../../service/Dynamic-form-control.service';
+
 import { MatButton } from '@angular/material/button';
 import { InputDynamicComponent } from '../../Input/form-dynamic/input-dynamic/input-dynamic.component';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatCard, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { additionalform } from '../../../service/Dialog.service';
+import { FormBase } from '../../../interface/form-base';
+
 @Component({
     selector: 'form-dynamic-dialogue',
     templateUrl: './form-dynamic-dialogue.component.html',
-    standalone: true,
     imports: [
-        MatCard,
-        NgClass,
-        MatCardHeader,
-        MatCardTitle,
-        ReactiveFormsModule,
-        NgFor,
-        NgIf,
-        InputDynamicComponent,
-        MatDialogActions,
-        MatButton,
-    ],
+    MatCard,
+    NgClass,
+    MatCardHeader,
+    MatCardTitle,
+    ReactiveFormsModule,
+    InputDynamicComponent,
+    MatButton,
+    MatDialogActions
+]
 })
 export class FormDynamicDialogueComponent implements OnInit {
   binding: Record<string, Record<string, (i: any) => any>> = {};
@@ -38,9 +39,12 @@ export class FormDynamicDialogueComponent implements OnInit {
   form!: FormGroup;
   payLoad = '';
 
+  //readonly dialogRef = inject(MatDialogRef<FormDynamicDialogueComponent>);
+  //readonly data = inject<{ inputs: FormBase<any>[], binding: additionalform }>(MAT_DIALOG_DATA);
+
   constructor(
     public dialogRef: MatDialogRef<FormDynamicDialogueComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { inputs: FormBase<any>[], binding: additionalform },
     private qcs: DynamicFormControlService
   ) {
   }
@@ -75,6 +79,9 @@ export class FormDynamicDialogueComponent implements OnInit {
       this.removeValue.forEach(i => { i === value && delete x[key] })
     });
     return x;
+  }
+  onNoClick(): void {
+    this.dialogRef.close(null);
   }
   onCancel() {
     this.dialogRef.close(null);

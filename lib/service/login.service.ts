@@ -1,11 +1,10 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
-import { map, Observable, throwError } from "rxjs";
+import { catchError, map, Observable, throwError } from "rxjs";
 import { Login } from "../interface/Login";
 import { DeleteLogin, SetLogin } from "../ngxs/Login.action";
-import { FormDataService } from "./Form/FormData.service";
 import { domain } from "../breakpoint";
 
 export interface loginform {
@@ -27,13 +26,24 @@ export class LoginService {
   @Select() login$!: Observable<Login | false>;
   login: Login | false = false
   logcheck(): void {
-    this.http.get<Login>(
-      domain + "/api/login",
-    ).subscribe({
+    this.http.get<Login>(domain+"/api/login",{
+      ...(localStorage.getItem("session_id") !== null ? {
+        headers: new HttpHeaders({
+            'x-session-id': localStorage.getItem("session_id") || ""
+        }),
+      } : {}),
+      observe: 'response'
+    }).subscribe({
       next: (j) => {
-        this.store.dispatch(new SetLogin(j));
+        if(j.headers.has("x-session-id")){
+          localStorage.setItem("session_id", j.headers.get("x-session-id") || "")
+        }
+        if (j.body) {
+          this.store.dispatch(new SetLogin(j.body));
+        }
       },
       error: (e) => {
+        localStorage.removeItem("session_id");
         console.log(e);
         this.store.dispatch(new DeleteLogin()).subscribe(() => this.router.navigate(["/login"], {
           queryParams: { returnUrl: this.router.url },
@@ -47,13 +57,29 @@ export class LoginService {
     }));
   }
   logout(): void {
-    this.http.get<string>(domain + "/api/logout").subscribe(
-      {
-        next: () => this.store.dispatch(new DeleteLogin()).subscribe(() => this.router.navigate(["/login"], {
+    this.http.get<string>(domain+"/api/logout",{
+      ...(localStorage.getItem("session_id") !== null ? {
+        headers: new HttpHeaders({
+            'x-session-id': localStorage.getItem("session_id") || ""
+        }),
+    } : {}),
+      observe: 'response'
+    }).subscribe({
+      next: (j) => {
+        localStorage.removeItem("session_id");
+        console.log(j);
+        this.store.dispatch(new DeleteLogin()).subscribe(() => this.router.navigate(["/login"], {
           queryParams: { returnUrl: this.router.url },
         }))
-      }
-    );
+      },
+      error: (e) => {
+        localStorage.removeItem("session_id");
+        console.log(e);
+        this.store.dispatch(new DeleteLogin()).subscribe(() => this.router.navigate(["/login"], {
+          queryParams: { returnUrl: this.router.url },
+        }))
+      },
+    });
   }
   errorMgmt(error: HttpErrorResponse) {
     let errorMessage = "";

@@ -33,12 +33,15 @@ export class AuthService {
 
   google(token: string) {
     this.form.get<Login>("/api/googleauth/" + token).subscribe({
-      next: (j) => { this.store.dispatch(new SetLogin(j)).subscribe(() => this.router.navigateByUrl(this.returnUrl)) },
+      next: (j) => {
+        this.store.dispatch(new SetLogin(j)).subscribe(() => { //return this.router.navigateByUrl(this.returnUrl)
+        })
+      },
       error: (e) => { this.error = e.error },
     });
   }
 
-  facebook(token:string) {
+  facebook(token: string) {
     this.form.get<Login>("/api/facebookauth/" + token).subscribe({
       next: (j) => { this.store.dispatch(new SetLogin(j)).subscribe(() => this.router.navigateByUrl(this.returnUrl)) },
       error: (e) => { this.error = e.error },

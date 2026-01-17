@@ -23,4 +23,8 @@ export class NavigationFocus implements OnDestroy {
     this.navigationFocusService.relinquishSkipLinkFocus(this.el.nativeElement);
   }
 }
-
+@NgModule({
+    imports: [NavigationFocus],
+    exports: [NavigationFocus],
+})
+export class NavigationFocusModule {}

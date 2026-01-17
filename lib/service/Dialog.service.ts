@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmComponent } from '../components/dialog/confirm/confirm.component';
 import { SelectImageComponent } from '../components/dialog/select-image/select-image.component';
@@ -6,6 +6,8 @@ import { SelectImagesComponent } from '../components/dialog/select-images/select
 import { DialogPhotosUpload } from '../interface/DialogPhotoUpload';
 import { FormDynamicDialogueComponent } from '../components/dialog/form-dynamic-dialogue/form-dynamic-dialogue.component';
 import { FormBase } from '../interface/form-base';
+import { LoginDialogComponent } from '../components/dialog/login/login.component';
+import { async } from 'rxjs';
 export interface additionalform {
   binding?: Record<string, any>,
   title?: string
@@ -14,25 +16,28 @@ export interface additionalform {
   providedIn: 'root'
 })
 export class DialogService {
-  constructor(private dialog: MatDialog) { }
-  confirm(head = 'Are You Sure?', body = `Please Comfirm the Action`): MatDialogRef<ConfirmComponent, any> {
-    return this.dialog.open(ConfirmComponent, {
+  readonly dialog = inject(MatDialog);
+  async confirm(head = 'Are You Sure?', body = `Please Comfirm the Action`): Promise<MatDialogRef<ConfirmComponent, any>> {
+    return import('../components/dialog/confirm/confirm.component').then(r => this.dialog.open(r.ConfirmComponent, {
       data: { head: head, body: body }
-    })
+    }))
   }
-  form(inputs: FormBase<any>[] = [], binding?: additionalform): MatDialogRef<FormDynamicDialogueComponent, any> {
-    return this.dialog.open(FormDynamicDialogueComponent, {
+  async form(inputs: FormBase<any>[], binding?: additionalform): Promise<MatDialogRef<FormDynamicDialogueComponent, any>> {
+    return import('../components/dialog/form-dynamic-dialogue/form-dynamic-dialogue.component').then(r => this.dialog.open(r.FormDynamicDialogueComponent, {
       data: { inputs: inputs, binding: binding || {} },
-    })
+    }));
   }
-  select_image(data: DialogPhotosUpload): MatDialogRef<SelectImageComponent, any> {
-    return this.dialog.open(SelectImageComponent, {
+  async select_image(data: DialogPhotosUpload): Promise<MatDialogRef<SelectImageComponent, any>> {
+    return import('../components/dialog/select-image/select-image.component').then(r => this.dialog.open(r.SelectImageComponent, {
       data: data,
-    })
+    }));
   }
-  select_images(data: DialogPhotosUpload): MatDialogRef<SelectImagesComponent, any> {
-    return this.dialog.open(SelectImagesComponent, {
+  async select_images(data: DialogPhotosUpload): Promise<MatDialogRef<SelectImagesComponent, any>> {
+    return import('../components/dialog/select-images/select-images.component').then(r => this.dialog.open(r.SelectImagesComponent, {
       data: data,
-    })
+    }));
+  }
+  async login(): Promise<MatDialogRef<LoginDialogComponent, any>> {
+    return import('../components/dialog/login/login.component').then(r => this.dialog.open(r.LoginDialogComponent, { data: null }));
   }
 }

@@ -15,6 +15,7 @@ export class FormBase<T> {
   error: string;
   other: { options?: string[], photo?: any, photos?: any, service?: any, directory?: string, slider?: boolean };
   row: string;
+  valueChanges?: Observable<any>;
   constructor(options: {
     value?: T;
     key?: string;

@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import { map } from 'rxjs';
-import { DialogPhotoUpload } from 'the-angular/lib/interface/DialogPhotoUpload';
+import { DialogPhotoUpload } from '../../../interface/DialogPhotoUpload';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { UploadImagesComponent } from '../../upload/upload-images/upload-images.component';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { domain } from '../../../breakpoint';
 
 @Component({
     selector: 'the-select-image',
@@ -17,8 +18,7 @@ import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, Mat
     host: {
         class: "w-full"
     },
-    standalone: true,
-    imports: [MatDialogTitle, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription, UploadImagesComponent, NgIf, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, ReactiveFormsModule, FormsModule, NgFor, MatDialogClose, AsyncPipe]
+    imports: [MatDialogTitle, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription, UploadImagesComponent, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, ReactiveFormsModule, FormsModule, MatDialogClose, AsyncPipe]
 })
 export class SelectImageComponent implements OnInit {
   constructor(
@@ -26,6 +26,7 @@ export class SelectImageComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public DialogPhotoUpload: DialogPhotoUpload,
   ) {
   }
+  public domain = domain;
   delid: number | undefined;
   setdel(id: number | undefined) {
     this.delid = id;

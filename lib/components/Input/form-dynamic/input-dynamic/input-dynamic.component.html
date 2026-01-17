@@ -16,7 +16,7 @@
   </mat-form-field>
   <mat-form-field *ngSwitchCase="'datepicker'" appearance="fill" [ngClass]="input.class">
     <mat-label>{{input.label}}</mat-label>
-    <input matInput [matDatepicker]="picker" [formControlName]="input.key">
+    <input matInput [matDatepicker]="picker" [formControlName]="input.key" >
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
     <mat-error *ngIf="form.invalid">{{input.error}}</mat-error>
@@ -31,7 +31,7 @@
     py-2 rounded border-gray-800/20" (click)="photo_select()">
       <input [formControlName]="input.key" class="hidden" />
       <ng-template [ngIf]="!(input.other.photo==''||!input.other.photo)">
-        <img class="max-w-full max-h-full m-auto" src="{{input.other.photo && input.other.photo.public}}" />
+        <img class="max-w-full max-h-full m-auto" src="{{domain}}{{input.other.photo && input.other.photo.public}}" />
       </ng-template>
       <ng-template [ngIf]="input.other.photo==''||!input.other.photo">
         <p class="text-center flex flex-col-reverse text-lg">
@@ -47,7 +47,7 @@
       [ngClass]="(isScreenSmall | async) ? 'flex-col' :''" (click)="photos_select()">
       <div cdkDrag *ngFor="let photoitem of input.other.photos"
         class="aspect-square flex justify-center content-center max-w-xs max-h-xs">
-        <img class="max-w-full max-h-full m-auto" src="{{photoitem && photoitem.public}}" />
+        <img class="max-w-full max-h-full m-auto" src="{{domain}}{{photoitem && photoitem.public}}" />
       </div>
     </div>
     <div *ngIf="input.other.photos.length === 0" class="h-56 aspect-square my-2 flex justify-center content-center border border-solid m-auto
@@ -70,14 +70,14 @@
   </mat-form-field>
   <mat-form-field *ngSwitchCase="'date'" [ngClass]="input.class">
     <mat-label>{{input.label}}</mat-label>
-    <input matInput [matDatepicker]="picker">
+    <input [formControlName]="input.key" matInput [matDatepicker]="picker">
     <mat-hint>MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker">
     </mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <mat-slide-toggle [formControlName]="input.key" *ngSwitchCase="'toggle'"
-    [ngClass]="input.class">Enable</mat-slide-toggle>
+    [ngClass]="input.class">{{input.label}}</mat-slide-toggle>
   <div *ngSwitchCase="'dropdownautocomplete'">
     <input type="text" matInput [formControlName]="input.key" hidden />
     <mat-form-field class="w-full" appearance="fill" [ngClass]="input.class">

@@ -1,33 +1,105 @@
-<mat-toolbar color="primary" class="justify-between nav mat-elevation-z6">
-    <div>
-        <a routerLink="/" routerLinkActive="button-active" mat-flat-button color="primary">
-            <img alt="Intaxing Logo" class="w-10" src="assets/my_icon/intaxing-new-white.svg">
+<mat-toolbar
+  class="w-full min-h-16 gap-4 px-4 sm:px-8 bg-gradient-to-r from-[var(--mat-sys-primary-container)] via-[var(--mat-sys-surface)] to-[var(--mat-sys-primary-container)] text-[var(--mat-sys-on-primary-container)] shadow-lg shadow-[color-mix(in_srgb,var(--mat-sys-primary)_30%,transparent)] !bg-mat_blu">
+  <a
+    routerLink="/"
+    routerLinkActive="button-active"
+    class="inline-flex items-center rounded-xl px-2 py-1 transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+  >
+    <img alt="Rentzoma Logo" class="w-12" src="assets/my_icon/intaxing-new-white.svg" />
+  </a>
+
+  <div class="hidden items-center gap-3 sm:flex">
+    @for (item of navItems; track item.label) {
+      @if (!item.children) {
+        <a
+          [routerLink]="item.route"
+          class="inline-flex items-center rounded-full px-3.5 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+          [ngClass]="item.callToAction
+            ? 'bg-gradient-to-r from-[var(--mat-sys-primary)] to-[var(--mat-sys-tertiary)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--mat-sys-primary)_40%,transparent)] hover:-translate-y-0.5'
+            : 'text-white/90 hover:bg-white/10'"
+        >
+          {{ item.label }}
         </a>
-    </div>
-    <div class="grow"></div>
-    <ng-container *ngIf="getLogin; then login_container else logout_container"></ng-container>
-    <ng-template #login_container>
-        <div>
-            <button [matMenuTriggerFor]="logmenu" mat-icon-button class="person-icon"
-                aria-label="person-button with person icon">
-                <mat-icon>person</mat-icon>
-            </button>
-            <mat-menu #logmenu="matMenu">
-                <span *ngFor="let item of DropMenuItem | keyvalue">
-                    <button [routerLink]="item.value" mat-menu-item>
-                        {{item.key}}
-                    </button>
-                </span>
-                <button mat-menu-item (click)="logout()">LogOut</button>
-            </mat-menu>
+      } @else {
+        <div
+          class="group relative"
+          tabindex="-1"
+          [class.opacity-100]="activeDropdown === item.label"
+          (mouseenter)="openDropdown(item.label)" (mouseleave)="closeDropdown(item.label)">
+          <button
+            class="inline-flex items-center gap-1 rounded-full border border-white/20 px-3.5 py-1.5 text-sm font-semibold transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+            type="button"
+            (click)="toggleDropdown($event, item.label)"
+            [attr.aria-expanded]="activeDropdown === item.label" aria-haspopup="true" aria-controls="service-menu-panel">
+            {{ item.label }}
+            <mat-icon class="transition"
+              [ngClass]="{ '!rotate-180': activeDropdown === item.label }">expand_more</mat-icon>
+          </button>
+
+          <div
+            class="absolute left-0 z-50 mt-2 hidden min-w-[280px] max-w-[520px] rounded-2xl border border-white/20 bg-[var(--mat-sys-surface-container)] p-5 text-[var(--mat-sys-on-surface)] shadow-2xl shadow-black/20 sm:max-w-xl"
+            [ngClass]="{ 'flex': activeDropdown === item.label }"
+            id="service-menu-panel"
+            role="menu"
+          >
+            <ul class="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+              @for (option of (item.children || []); track option.title) {
+              <li class="w-full">
+                <a
+                  class="block rounded-xl border border-transparent px-4 py-3 text-left transition hover:border-[var(--mat-sys-primary)] hover:bg-[color-mix(in_srgb,var(--mat-sys-primary)_12%,transparent)] hover:text-[var(--mat-sys-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--mat-sys-primary)]"
+                  [routerLink]="option.route"
+                >
+                  <div class="text-sm font-semibold">{{ option.title }}</div>
+                  <p class="mt-1 text-xs text-[var(--mat-sys-on-surface-variant)]">
+                    {{ option.description }}
+                  </p>
+                </a>
+              </li>
+              }
+            </ul>
+          </div>
         </div>
-    </ng-template>
-    <ng-template #logout_container>
-        <div>
-            <button routerLink="/login" routerLinkActive="button-active" mat-icon-button class="person-icon"
-                aria-label="person-button with person icon">
-                <mat-icon>person</mat-icon>
-            </button>
-        </div>
-    </ng-template>
+      }
+    }
+  </div>
+  <span class="flex-1"></span>
+  @if (getLogin) {
+  <div class="hidden sm:block">
+    <button [matMenuTriggerFor]="logmenu" matMiniFab
+      class="!bg-white/15 !text-white hover:!bg-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+      aria-label="person-button with person icon">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #logmenu="matMenu">
+      @for (item of DropMenuItem | keyvalue; track item) {
+      <span>
+        <button [routerLink]="item.value" mat-menu-item>
+          {{item.key}}
+        </button>
+      </span>
+      }
+      <button mat-menu-item (click)="logout()">LogOut</button>
+    </mat-menu>
+  </div>
+  } @else {
+  <div class="hidden sm:block">
+    <button routerLink="/login" routerLinkActive="button-active" matMiniFab
+      class="!bg-white/15 !text-white hover:!bg-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50">
+      <mat-icon>person</mat-icon>
+    </button>
+    <!--
+      <button routerLinkActive="button-active" mat-icon-button class="menu-icon sm:!hidden"
+        aria-label="menu-button with icon">
+        <mat-icon>menu</mat-icon>
+      </button> -->
+  </div>
+  }
+
+  <div class="sm:!hidden">
+    <button matMiniFab
+      class="!bg-white/15 !text-white hover:!bg-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+      (click)="toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>

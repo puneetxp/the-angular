@@ -1,12 +1,34 @@
 {
   "name": "the-angular",
-  "version": "0.0.4",
-  "description": "Angular The Lib of The Framework",
-  "main": "intex.ts",
-  "directories": {
-    "lib": "lib"
+  "version": "0.0.6",
+  "description": "Angular UI building blocks, dialogs, tables, and form utilities.",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./bundles/the-angular.umd.cjs",
+  "module": "./fesm2022/the-angular.mjs",
+  "types": "./types/the-angular.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./types/the-angular.d.ts",
+      "default": "./fesm2022/the-angular.mjs"
+    }
   },
+  "files": [
+    "bundles",
+    "fesm2022",
+    "fesm2020",
+    "esm2022",
+    "esm2020",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "ng build the-angular-lib",
+    "pack": "npm run build && cd ../dist/the-angular && npm pack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +42,25 @@
   ],
   "author": "puneet sharma",
   "license": "Apache-2.0",
+  "peerDependencies": {
+    "@angular/animations": "^21.0.0",
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "rxjs": "^7.8.0",
+    "zone.js": "^0.15.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/animations": {
+      "optional": true
+    },
+    "@angular/router": {
+      "optional": true
+    }
+  },
   "bugs": {
     "url": "https://github.com/puneetxp/the-angular/issues"
   },

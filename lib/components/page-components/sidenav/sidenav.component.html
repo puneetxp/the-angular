@@ -1,42 +1,89 @@
 <mat-sidenav-container class="flex-1">
-  <mat-sidenav #sidenav class="xs:w-56 xm:w-60" *ngIf="(isScreenSmall | async)"
-    [opened]="(isScreenSmall | async) === false" [mode]="(isScreenSmall | async) ? 'over' : 'side'"
-    [fixedInViewport]="(isScreenSmall | async)" [fixedTopGap]="56">
-    <the-menu [params]="params" [menus]=menus></the-menu>
-  </mat-sidenav>
+  @if ((isScreenSmall | async)) {
+    <mat-sidenav #sidenav class="xs:w-56 xm:w-60"
+      [opened]="(isScreenSmall | async) === false" [mode]="(isScreenSmall | async) ? 'over' : 'side'"
+      [fixedInViewport]="(isScreenSmall | async)" [fixedTopGap]="56">
+      <the-menu class="h-[calc(100vh-112px)]" [params]="params" [menus]=menus [editingContext]="editingContext"></the-menu>
+    </mat-sidenav>
+  }
   <mat-sidenav-content>
-    <div class="min-h-full flex flex-col">
+    <div class="h-full flex flex-col snap-mandatory snap-y">
       <the-page-title (toggleSidenav)="toggleSidenav(sidenav)">
-        <button ngClass="!h-full my-auto" *ngIf="(isScreenSmall | async)" mat-button class="sidenav-toggle"
-          (click)="toggleSidenav(sidenav)">
-          <mat-icon class="text-white">menu</mat-icon>
-        </button>
-        <div class="matmd:px-5 w-full flex justify-between">
-          <h1 class="my-auto text-xl">{{active.label}}</h1>
-          <div class="flex">
-            <div class="grid grid-rows-2">
-              <button mat-flat-button class="my-auto !p-0 !h-8 !w-8 !min-w-0" *ngFor="let link of active.links"[routerLink]="link.route" routerLinkActive="mat-mdc-raised-button" color="primary">
-                <mat-icon class="text-white !h-8 !w-4 text-2xl self-center !m-auto">{{link.label}}</mat-icon>
-              </button>
-            </div>
-            <button mat-button *ngIf="active.child" class="!h-full my-auto !p-0"
-              [routerLink]="router.url !== active.route ? active.route : active.child[0].route">
-              <mat-icon class="text-white !h-9 !w-9 !text-3xl self-center !m-auto">{{router.url !== active.route ? "arrow_back" : "add"}}</mat-icon>
-            </button>
+        @if ((isScreenSmall | async)) {
+          <button ngClass="!h-full my-auto" mat-button class="sidenav-toggle"
+            (click)="toggleSidenav(sidenav)">
+            <mat-icon class="text-white">menu</mat-icon>
+          </button>
+        }
+        <div class="matlg:px-5 w-full flex gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div class="flex items-center gap-3 md:min-w-[350px]">
+            <h1 class="text-xl font-semibold text-slate-50 drop-shadow-sm !my-2 !py-0">{{(menuBarService.getTitle() | async) || active.label}}</h1>
+            @if (editingContext) {
+              <span
+                class="inline-flex items-center gap-1 rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-medium text-slate-50 backdrop-blur-sm"
+                matTooltip="You are editing this item">
+                <mat-icon class="text-base">edit</mat-icon>
+                <span>Editing {{ editingContext }}</span>
+              </span>
+            }
+          </div>
+          <div class="flex flex-col gap-2 w-full items-stretch sm:flex-row sm:flex-wrap sm:justify-end sm:items-center lg:w-auto">
+            @if ((menuBarService.getPrimaryActionButton()| async); as primaryButton) {
+              <a mat-flat-button color="primary"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 font-semibold text-white shadow-xl shadow-black/20 transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                [routerLink]="primaryButton.href">
+                <mat-icon>{{primaryButton.icon}}</mat-icon>
+                <span>{{primaryButton.label || 'Primary'}}</span>
+              </a>
+            }
+            @if ((menuBarService.getActionButtons()| async); as actions) {
+              <div class="inline-flex items-center gap-2 flex-wrap justify-end">
+                @for (link of actions.slice(0, secondaryInlineLimit); track link.href) {
+                  <a mat-stroked-button color="primary"
+                    class="inline-flex items-center gap-2 rounded-full border border-white/50 text-white/80 px-4 py-2 hover:bg-white/10/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 backdrop-blur-sm transition"
+                    [style.--mat-button-outlined-label-text-color]="'rgba(255,255,255,0.85)'"
+                    [style.--mat-button-outlined-outline-color]="'rgba(255,255,255,0.5)'"
+                    [routerLink]="link.href" routerLinkActive="bg-white/10">
+                    <mat-icon>{{link.icon}}</mat-icon>
+                    <span>{{link.label || 'Action'}}</span>
+                  </a>
+                }
+                @if (actions.length > secondaryInlineLimit) {
+                  <button mat-stroked-button color="primary"
+                    class="inline-flex items-center gap-2 rounded-full border border-white/50 text-white/80 px-4 py-2 hover:bg-white/10/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 backdrop-blur-sm transition"
+                    [style.--mat-button-outlined-label-text-color]="'rgba(255,255,255,0.85)'"
+                    [style.--mat-button-outlined-outline-color]="'rgba(255,255,255,0.5)'"
+                    [matMenuTriggerFor]="overflowActions">
+                    <mat-icon>more_horiz</mat-icon>
+                    <span>{{actions.length - secondaryInlineLimit}} more</span>
+                  </button>
+                  <mat-menu #overflowActions="matMenu">
+                    @for (link of actions.slice(secondaryInlineLimit); track link.href) {
+                      <button mat-menu-item [routerLink]="link.href">
+                        <mat-icon>{{link.icon}}</mat-icon>
+                        <span>{{link.label || 'Action'}}</span>
+                      </button>
+                    }
+                  </mat-menu>
+                }
+              </div>
+            }
           </div>
         </div>
       </the-page-title>
-      <div class="flex flex-col grow">
+      <div class="flex flex-col grow h-[calc(100vh-112px)]">
         <!-- If on small screen, menu resides in drawer -->
         <main class="flex flex-auto">
           <!-- If on large screen, menu resides to left of content -->
-          <the-menu *ngIf="(isScreenSmall | async) === false" class="" [params]="params" [menus]=menus>
-          </the-menu>
-          <div class="w-full overflow-scroll">
+          @if ((isScreenSmall | async) === false) {
+            <the-menu class="h-[calc(100vh-112px)]" [params]="params" [menus]="menus" [editingContext]="editingContext">
+            </the-menu>
+          }
+          <div class="w-full">
             <router-outlet></router-outlet>
           </div>
         </main>
-        <the-footer class="my-0"></the-footer>
+        <!-- <the-footer class="my-0"></the-footer> -->
       </div>
     </div>
   </mat-sidenav-content>

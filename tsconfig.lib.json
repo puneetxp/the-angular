@@ -1,0 +1,24 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "types": ["google.accounts"],
+    "outDir": "../dist/out-tsc/the-angular"
+  },
+  "exclude": [
+    "src/test.ts",
+    "**/*.spec.ts",
+    "lib/module/angularx-social-login-master/**"
+  ],
+  "include": [
+    "public-api.ts",
+    "lib/**/*.ts"
+  ],
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
+  }
+}

@@ -3,15 +3,16 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
 import { Observable, map } from 'rxjs';
-import { DialogPhotosUpload } from 'the-angular/lib/interface/DialogPhotoUpload';
+import { DialogPhotosUpload } from '../../../interface/DialogPhotoUpload';
 import { UploadImageDialog } from '../../upload/upload-images/upload-image-dialoge/upload-image-dialog.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { domain } from '../../../breakpoint';
 const WIDTH_BREAK = 577;
 @Component({
     selector: 'the-select-images',
@@ -20,10 +21,11 @@ const WIDTH_BREAK = 577;
     host: {
         class: "w-full"
     },
-    standalone: true,
-    imports: [MatDialogTitle, MatButton, MatIcon, NgIf, CdkScrollable, MatDialogContent, NgClass, CdkDropList, NgFor, CdkDrag, MatFormField, MatLabel, MatInput, ReactiveFormsModule, FormsModule, AsyncPipe]
+    imports: [MatDialogTitle, MatButton, MatIcon, CdkScrollable, MatDialogContent, NgClass, CdkDropList, CdkDrag, MatFormField, MatLabel, MatInput, ReactiveFormsModule, FormsModule, AsyncPipe]
 })
 export class SelectImagesComponent implements OnInit {
+
+  public domain = domain;
   constructor(
     public dialogRef: MatDialogRef<SelectImagesComponent>,
     @Inject(MAT_DIALOG_DATA) public DialogPhotosUpload: DialogPhotosUpload,

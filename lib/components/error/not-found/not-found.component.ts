@@ -8,7 +8,6 @@ import { MatButton } from '@angular/material/button';
     host: {
         class: "w-full flex justify-center grow content-center bg-mat_blu/80"
     },
-    standalone: true,
     imports: [MatButton]
 })
 export class NotFoundComponent implements OnInit {

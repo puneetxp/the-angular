@@ -10,7 +10,7 @@ export class FacebookSigninButtonDirective implements OnInit {
 
 
   constructor(private el: ElementRef) { }
-  @HostBinding('disabled') disabled: boolean = false;
+  @Input() @HostBinding('attr.disabled') disabled: boolean | null = null;
   @Input({ required: true }) callback!: any;
 
   providor !: FacebookLoginProvider;

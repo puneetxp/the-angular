@@ -1,22 +1,23 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormBase } from 'the-angular/lib/interface/form-base';
-import { DynamicFormControlService } from 'the-angular/lib/service/Dynamic-form-control.service';
+import { FormBase } from '../../../interface/form-base';
+import { DynamicFormControlService } from '../../../service/Dynamic-form-control.service';
 import { MatDialogActions } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { InputDynamicComponent } from './input-dynamic/input-dynamic.component';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
 import { MatCard, MatCardActions } from '@angular/material/card';
+import { Observable, Subscription } from 'rxjs';
 @Component({
     selector: 'the-form-dynamic',
     templateUrl: './form-dynamic.component.html',
     providers: [DynamicFormControlService],
-    standalone: true,
-    imports: [MatCard, NgClass, ReactiveFormsModule, NgFor, NgIf, InputDynamicComponent, MatCardActions, MatButton, MatDialogActions]
+    imports: [MatCard, NgClass, ReactiveFormsModule, InputDynamicComponent, MatCardActions, MatButton, MatDialogActions]
 })
-export class FormDynamicComponent implements OnInit {
+export class FormDynamicComponent implements OnInit, OnChanges, OnDestroy {
   @Input() head = '';
   @Input() inputs: FormBase<any>[] = [];
+  @Input() asyncInput: Observable<FormBase<any>[]> |null = null;
   @Input() isDialog = false;
   @Input() isSubmit = true;
   @Input() MatClass = '';
@@ -27,11 +28,11 @@ export class FormDynamicComponent implements OnInit {
   @Input() liveSingle !: string[];
   @Input() FillLeastOne !: string[][]
   @Input() isReset = false;
-  @Input() removeValue = [null, ""];
+  @Input() removeValue = [null, ''];
   @Input() rowClass = 'form-row';
   @Input() formClass = 'py-2'
   @Input() Submit = 'Submit';
-  @Input() SubmitClass = "";
+  @Input() SubmitClass = '';
   @Input() binding: Record<string, Record<string, (i: any) => any>> = {};
   @Output() listenRaw = new EventEmitter<any>();
   @Output() isVaild = new EventEmitter<boolean>();
@@ -42,11 +43,13 @@ export class FormDynamicComponent implements OnInit {
   @Output() listen = new EventEmitter<any>();
   form!: FormGroup;
   payLoad = '';
+  private asyncInputSubscription: Subscription | undefined;
 
   constructor(private qcs: DynamicFormControlService,) { }
   ngOnInit() {
+    this.MatClass = this.MatClass + ' p-2 ';
     this.isVaild.emit(false);
-    this.form = this.qcs.toFormGroup(this.inputs);
+    this.buildForm();
     this.valueReset && this.form.reset();
     this.isLive && this.form.valueChanges.subscribe(() => {
       this.preValidation();
@@ -62,10 +65,36 @@ export class FormDynamicComponent implements OnInit {
         this.form.controls[t].setValue(any(i))))
     })
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['inputs'] || changes['asyncInput']) {
+      this.buildForm();
+    }
+  }
+  ngOnDestroy() {
+    this.asyncInputSubscription?.unsubscribe();
+  }
+
+  buildForm() {
+    if (this.asyncInputSubscription) {
+      this.asyncInputSubscription.unsubscribe();
+    }
+    if(this.asyncInput){
+      this.asyncInputSubscription = this.asyncInput.subscribe(x => {
+        this.inputs = x;
+        this.form = this.qcs.toFormGroup(x);
+      });
+    }else{
+      this.form = this.qcs.toFormGroup(this.inputs);
+    }
+    this.valueReset && this.form.reset();
+    this.preValidation();
+  }
+
   preValidate = true;
   preValidation() {
     this.FillLeastOne && (this.FillLeastOne.forEach(x => {
-      if (!x.every(x => this.form.controls[x].value == null || this.form.controls[x].value == "")) {
+      if (!x.every(x => this.form.controls[x].value == null || this.form.controls[x].value == '')) {
         x.forEach(x => { this.form.controls[x].setErrors(null); this.form.controls[x].markAllAsTouched(); }); this.preValidate = false;
       } else {
         x.forEach(x => { this.form.controls[x].setErrors({ "error": true }); this.form.controls[x].markAllAsTouched(); });

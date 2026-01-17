@@ -2,16 +2,16 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngxs/store';
-import { DialogPhotoUpload } from 'the-angular/lib/interface/DialogPhotoUpload';
-import { FormDataService } from 'the-angular/lib/service/Form/FormData.service';
-import { ImageService } from 'the-angular/lib/service/image.service';
-import { LoginService } from 'the-angular/lib/service/login.service';
+import { DialogPhotoUpload } from '../../../interface/DialogPhotoUpload';
+import { FormDataService } from '../../../service/Form/FormData.service';
+import { ImageService } from '../../../service/image.service';
+import { LoginService } from '../../../service/login.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { FileDragNDropDirective } from '../../directive/file-drag-drop';
 import { MatInput } from '@angular/material/input';
-import { NgClass, NgIf, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -19,8 +19,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     selector: 'the-upload-images',
     templateUrl: './upload-images.component.html',
     styleUrls: ['./upload-images.component.scss'],
-    standalone: true,
-    imports: [ReactiveFormsModule, FormsModule, MatFormField, NgClass, MatLabel, MatInput, NgIf, FileDragNDropDirective, MatProgressSpinner, MatButton, MatIcon, NgFor]
+    imports: [ReactiveFormsModule, FormsModule, MatFormField, NgClass, MatLabel, MatInput, FileDragNDropDirective, MatProgressSpinner, MatButton, MatIcon]
 })
 export class UploadImagesComponent {
 
@@ -70,7 +69,7 @@ export class UploadImagesComponent {
     }
   }
   upload(event: Event): void {
-    this.DialogPhotoUpload &&
+    if (this.DialogPhotoUpload) {
       ((event.target instanceof HTMLFormElement &&
         this.Form.HTML(event.target)
           .FilesAppend(this.photos.files, 'photo[]')
@@ -101,5 +100,8 @@ export class UploadImagesComponent {
             },
           })) ||
         console.log('There is Error'));
+    } else {
+      this.Form.HTML(event.target as HTMLFormElement).FilesAppend(this.photos.files, 'photo[]');
+    }
   }
 }

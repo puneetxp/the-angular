@@ -2,15 +2,17 @@
   <mat-form-field class="w-full">
     <mat-label>{{input.label}}</mat-label>
     <input type="text"
-           [placeholder]="input.label"
-           matInput
-           (input)="autocomplete($event.target)"
-           [formControlName]="input.key"
-           [matAutocomplete]="auto">
+      [placeholder]="input.label"
+      matInput
+      (input)="autocomplete($event.target)"
+      [formControlName]="input.key"
+      [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptions" [value]="option">
-        {{option}}
-      </mat-option>
+      @for (option of filteredOptions; track option) {
+        <mat-option [value]="option">
+          {{option}}
+        </mat-option>
+      }
     </mat-autocomplete>
   </mat-form-field>
 </form>

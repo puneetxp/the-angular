@@ -3,34 +3,37 @@ import { Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 
-import { DynamicFormService } from 'the-angular/lib/service/Dynamic-form.service';
-import { FormDataService } from 'the-angular/lib/service/Form/FormData.service';
-import { AuthService } from 'the-angular/lib/service/auth.service';
+import { DynamicFormService } from '../../../service/Dynamic-form.service';
+import { FormDataService } from '../../../service/Form/FormData.service';
+import { AuthService } from '../../../service/auth.service';
 
-import { CommonModule } from '@angular/common';
-import { FacebookSigninButtonDirective } from 'the-angular/lib/module/angularx-social-login-master/projects/lib/src/directives/facebook-singin-button-directive';
-import { GoogleSigninButtonDirective } from 'the-angular/lib/module/angularx-social-login-master/projects/lib/src/public-api';
-import { loginform } from 'the-angular/lib/service/login.service';
-import { Login } from 'the-angular/lib/interface/Login';
+import { FacebookSigninButtonDirective } from '../../../module/angularx-social-login-master/projects/lib/src/directives/facebook-singin-button-directive';
+import { GoogleSigninButtonDirective } from '../../../module/angularx-social-login-master/projects/lib/src/public-api';
+import { loginform } from '../../../service/login.service';
+import { Login } from '../../../interface/Login';
+
 import { Store } from '@ngxs/store';
-import { SetLogin } from 'the-angular/lib/ngxs/Login.action';
-import { MatCard, MatCardActions, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { SetLogin } from '../../../ngxs/Login.action';
+
+import { MatCardActions, MatCardModule, MatCardSubtitle } from '@angular/material/card';
 import { FormDynamicComponent } from '../../Input/form-dynamic/form-dynamic.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButton } from '@angular/material/button';
+
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
+    imports: [
     FacebookSigninButtonDirective,
     GoogleSigninButtonDirective,
     RouterLink,
+    MatButton,
     MatDialogModule,
-    MatCard,
-    MatCardTitle,
     MatCardActions,
-    FormDynamicComponent
+    MatCardModule,
+    FormDynamicComponent,
+    MatExpansionModule
 ],
-  selector: 'the-login-dialog',
-  templateUrl: './login.component.html'
+    selector: 'the-login-dialog',
+    templateUrl: './login.component.html'
 })
 export class LoginDialogComponent {
   constructor(

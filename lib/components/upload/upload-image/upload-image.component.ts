@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { DialogService } from "the-angular/lib/service/Dialog.service";
-import { FormDataService } from "the-angular/lib/service/Form/FormData.service";
-import { ImageService } from "the-angular/lib/service/image.service";
+import { DialogService } from "../../../service/Dialog.service";
+import { FormDataService } from "../../../service/Form/FormData.service";
+import { ImageService } from "../../../service/image.service";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton } from "@angular/material/button";
 import { FileDragNDropDirective } from "../../directive/file-drag-drop";
 import { MatInput } from "@angular/material/input";
-import { NgClass, NgFor, KeyValuePipe } from "@angular/common";
+import { NgClass, KeyValuePipe } from "@angular/common";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
@@ -17,8 +17,7 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
     selector: 'the-upload-image',
     templateUrl: './upload-image.component.html',
     styleUrls: ['./upload-image.component.scss'],
-    standalone: true,
-    imports: [ReactiveFormsModule, FormsModule, MatFormField, NgClass, MatLabel, MatInput, NgFor, FileDragNDropDirective, MatButton, MatIcon, KeyValuePipe]
+    imports: [ReactiveFormsModule, FormsModule, MatFormField, NgClass, MatLabel, MatInput, FileDragNDropDirective, MatButton, MatIcon, KeyValuePipe]
 })
 export class UploadImageComponent {
 

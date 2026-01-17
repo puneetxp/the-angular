@@ -13,16 +13,16 @@ import {
 export class FileDragNDropDirective {
   //@Input() private allowed_extensions : Array<string> = ['png', 'jpg', 'bmp'];
   @Output()
-  private filesChangeEmiter: EventEmitter<DragEvent> = new EventEmitter();
+  public filesChangeEmiter: EventEmitter<DragEvent> = new EventEmitter();
   //@Output() private filesInvalidEmiter : EventEmitter<File[]> = new EventEmitter();
   @HostBinding("style.background")
-  private background = "#eee";
+  public background = "#eee";
   @HostBinding("style.border")
-  private borderStyle = "2px dashed";
+  public borderStyle = "2px dashed";
   @HostBinding("style.border-color")
-  private borderColor = "#696D7D";
+  public borderColor = "#696D7D";
   @HostBinding("style.border-radius")
-  private borderRadius = "5px";
+  public borderRadius = "5px";
 
   constructor() {}
 

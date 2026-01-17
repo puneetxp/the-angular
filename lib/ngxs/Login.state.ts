@@ -16,7 +16,7 @@ export class LoginState {
       return state;
     }
     @Selector()
-    static isLogin(state: Login | false, router: Router) {
+    static isLogin(state: Login | false) {
       if (state) {
         return state;
       }
