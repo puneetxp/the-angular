@@ -29,7 +29,8 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ""
         run: |
-          unset NODE_AUTH_TOKEN
           cd ../dist/the-angular
           npm publish --access public --provenance
