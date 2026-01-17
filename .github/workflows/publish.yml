@@ -20,14 +20,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org/
-          always-auth: true
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build library
         run: npm run build
+
+      - name: Clear npm auth config
+        run: rm -f ~/.npmrc
 
       - name: Publish to npm
         run: |
