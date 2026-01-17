@@ -33,4 +33,4 @@ jobs:
           NODE_AUTH_TOKEN: ""
         run: |
           cd ../dist/the-angular
-          npm publish --access public --provenance
+          npm publish --access public --provenance --auth-type=web
