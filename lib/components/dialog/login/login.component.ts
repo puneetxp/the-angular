@@ -84,18 +84,23 @@ export class LoginDialogComponent {
       },
     });
   }
+  Log!: ReturnType<DynamicFormService['getForm']>;
   ngOnInit(): void {
+    this.Log = this.formdynamic.getForm([
+      {
+        key: "email", label: "Email", value: "", Validators: [Validators.required, Validators.email], controlType: 'textbox', class: 'w-full', error: "Please enter a valid email"
+      },
+      {
+        key: "password", label: "Password", value: "", Validators: [Validators.required, Validators.minLength(6)], controlType: 'password', class: 'w-full', error: "Min 6 charcter"
+      },
+      {
+        key: "remember_me", label: "Remeber Me", value: "", controlType: "checkbox"
+      }
+    ]);
     this.auth.error = "";
     this.form.get("/api/login_method").subscribe((i: any) => {
       this.login_methods = i;
     })
   }
-  Log = this.formdynamic.getForm([{
-    key: "email", label: "Email", value: "", Validators: [Validators.required, Validators.email], controlType: 'textbox', class: 'w-full', error: "Please enter a valid email"
-  }, {
-    key: "password", label: "Password", value: "", Validators: [Validators.required, Validators.minLength(6)], controlType: 'password', class: 'w-full', error: "Min 6 charcter"
-  }, {
-    key: "remember_me", label: "Remeber Me", value: "", controlType: "checkbox"
-  }]);
 
 }

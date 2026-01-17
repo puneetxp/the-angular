@@ -87,8 +87,8 @@ export class SidenavComponent implements OnInit {
   title(): void {
     document.querySelector("mat-sidenav-content")?.scroll({ top: 0 });
     const active = this.menus.find(i =>
-      this.router.url == i.route || this.router.url.match(new RegExp(i.route.replaceAll(this.regexp, '.+$1') + "$", "g")) ||
-      i.child && i.child.find(i => this.router.url == i.route || this.router.url.match(new RegExp(i.route.replaceAll(this.regexp, '.+$1') + "$", "g")))
+      this.router.url == i.route || this.router.url.match(new RegExp(this.normalizeRoute(i.route) + "$", "g")) ||
+      i.child && i.child.find(child => this.router.url == child.route || this.router.url.match(new RegExp(this.normalizeRoute(child.route) + "$", "g")))
     );
     this.active = active === undefined ? this.active : active;
     this.syncMenuBarActions(this.active);
@@ -140,12 +140,16 @@ export class SidenavComponent implements OnInit {
   private isRouteMatch(route?: string): boolean {
     if (!route) return false;
     if (this.router.url === route) return true;
-    const transformed = route.replaceAll(this.regexp, '.+$1');
+    const transformed = this.normalizeRoute(route);
     try {
       return !!this.router.url.match(new RegExp(transformed + "$", "g"));
     } catch {
       return false;
     }
+  }
+  private normalizeRoute(route?: string): string {
+    if (!route) return '';
+    return route.replace(this.regexp, '.+$1');
   }
   private resolveContextValue(route?: string): string | undefined {
     if (!route) return undefined;

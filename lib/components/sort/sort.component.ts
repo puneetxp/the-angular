@@ -16,12 +16,16 @@ export class SortComponent implements OnInit {
   }
   regexp = new RegExp(":.+?(\/)|:.*", "g");
   checkroute(route: string): boolean {
-    return this.router.url.match(new RegExp(route.replaceAll(this.regexp, '.+$1') + "$", "g")) && true || false;
+    return this.router.url.match(new RegExp(this.normalizeRoute(route) + "$", "g")) && true || false;
   }
   @Input() navmenu!: {
     name: string,
     route: string,
   }[]
   ngOnInit() { }
+
+  private normalizeRoute(route: string): string {
+    return route.replace(this.regexp, '.+$1');
+  }
 
 }
