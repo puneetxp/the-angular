@@ -27,9 +27,16 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "ng build the-angular-lib",
+    "build": "ng-packagr -p ng-package.json",
     "pack": "npm run build && cd ../dist/the-angular && npm pack",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@angular/compiler": "^21.1.0",
+    "@angular/compiler-cli": "^21.1.0",
+    "ng-packagr": "^21.1.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.5.4"
   },
   "repository": {
     "type": "git",
