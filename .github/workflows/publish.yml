@@ -1,48 +1,25 @@
-name: Publish the-angular
+name: Publish Package
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
 jobs:
-  build-and-publish:
+  publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-          always-auth: true
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build library
-        run: npm run build
-
-      - name: Debug npm auth context
-        run: |
-          echo "Environment variables with NPM/NODE_AUTH tokens:"
-          env | grep -E 'NODE_AUTH_TOKEN|NPM_TOKEN|NPM_CONFIG' || true
-          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ] && [ -f "$NPM_CONFIG_USERCONFIG" ]; then
-            echo "\nContents of $NPM_CONFIG_USERCONFIG:";
-            cat "$NPM_CONFIG_USERCONFIG"
-          fi
-          if [ -f ~/.npmrc ]; then
-            echo "\nContents of ~/.npmrc:";
-            cat ~/.npmrc
-          fi
-
-      - name: Publish to npm
-        run: |
-          cd ../dist/the-angular
-          npm publish --access public --provenance
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - run: npm publish
