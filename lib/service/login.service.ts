@@ -7,6 +7,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { domain } from '../breakpoint';
 import { Login } from '../interface/Login';
 import { DeleteLogin, SetLogin } from '../ngxs/Login.action';
+import { LoginState } from '../ngxs/Login.state';
 
 export interface loginform {
   name: string;
@@ -26,7 +27,7 @@ export class LoginService {
 
   public error = '';
 
-  @Select() login$!: Observable<Login | false>;
+  @Select(LoginState.getLogin) login$!: Observable<Login | false>;
   login: Login | false = false;
 
   logcheck(): void {
