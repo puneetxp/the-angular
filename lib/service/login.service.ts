@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { catchError, map, Observable, throwError } from 'rxjs';
 
 import { domain } from '../breakpoint';
@@ -23,11 +23,13 @@ export class LoginService {
     private router: Router,
     private store: Store,
     public http: HttpClient,
-  ) { }
+  ) { 
+    this.login$ = this.store.select(LoginState.getLogin);
+  }
 
   public error = '';
 
-  @Select(LoginState.getLogin) login$!: Observable<Login | false>;
+  login$: Observable<Login | false>;
   login: Login | false = false;
 
   logcheck(): void {
