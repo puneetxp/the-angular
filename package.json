@@ -1,6 +1,6 @@
 {
   "name": "the-angular",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Angular UI building blocks, dialogs, tables, and form utilities.",
   "type": "module",
   "sideEffects": false,

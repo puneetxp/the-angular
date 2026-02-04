@@ -28,6 +28,11 @@ export class FormDataService {
       x.forEach(element => i[element.url] && element.upsertState(i[element.url]));
     });
   }
+  remove_empty: boolean = true;
+  setremove_empty(remove_empty: boolean = true) {
+    this.remove_empty = remove_empty;
+    return this;
+  }
   formData = new FormData();
   domain = domain;
   method = "POST";
@@ -39,26 +44,27 @@ export class FormDataService {
     this.httpheader = new HttpHeaders(header);
     return this;
   }
-  get<T>(url: string, json?: Record<string, any>) {
+  get<T>(url: string, json?: Record<string, any>, remove_empty?: boolean) {
     json && (url += "?" + (new URLSearchParams(json).toString()));
-    return this.reset().Req<T>("get", url);
+    return this.reset().setremove_empty(remove_empty).Req<T>("get", url);
   }
-  post<T>(url: string, json?: Record<string, any>) {
-    return this.reset().Req<T>("post", url, json);
+  post<T>(url: string, json?: Record<string, any>, remove_empty?: boolean) {
+    return this.reset().setremove_empty(remove_empty).Req<T>("post", url, json);
   }
-  put<T>(url: string, json?: Record<string, any>) {
-    return this.reset().Req<T>("put", url, json);
+  put<T>(url: string, json?: Record<string, any>, remove_empty?: boolean) {
+    return this.reset().setremove_empty(remove_empty).Req<T>("put", url, json);
   }
-  patch<T>(url: string, json?: Record<string, any>) {
-    return this.reset().Req<T>("patch", url, json);
+  patch<T>(url: string, json?: Record<string, any>, remove_empty?: boolean) {
+    return this.reset().setremove_empty(remove_empty).Req<T>("patch", url, json);
   }
-  delete<T>(url: string, json?: Record<string, any>) {
-    return this.reset().Req<T>("delete", url, json);
+  delete<T>(url: string, json?: Record<string, any>, remove_empty?: boolean) {
+    return this.reset().setremove_empty(remove_empty).Req<T>("delete", url, json);
   }
   reset() {
     this.formData = new FormData();
     this.method = "POST";
     this.action = "";
+    this.remove_empty = true;
     return this;
   }
   HTML(form: HTMLFormElement): this {
@@ -148,7 +154,7 @@ export class FormDataService {
     }
   }
   Json(json: any) {
-    json = remove_empty(json);
+    this.remove_empty && (json = remove_empty(json));
     Object.keys(json).forEach((key) => key.endsWith("[]")
       ? json[key].forEach((element: any) =>
         this.formData.append(key, 
