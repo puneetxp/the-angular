@@ -22,12 +22,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'   # <-- important
-          always-auth: true # <-- ensures npm uses auth
-
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
       - run: npm ci
       - run: npm run build
+
+      - name: Verify npm authentication
+        run: npm whoami
 
       - name: Publish to npm
         run: |
