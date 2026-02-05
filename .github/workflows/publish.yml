@@ -10,7 +10,7 @@ on:
       - '.github/workflows/publish.yml'
 
 permissions:
-  id-token: write   # Required for OIDC
+  id-token: write
   contents: read
 
 jobs:
@@ -24,11 +24,11 @@ jobs:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
-
       - run: npm ci
       - run: npm run build
 
       - name: Publish to npm
-        run: |
-          cd ../dist/the-angular
-          NPM_CONFIG_PROVENANCE=false npm publish
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          provenance: true
+          access: public
