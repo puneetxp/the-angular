@@ -33,10 +33,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Verify npm authentication
-        run: |
-          echo "Checking npm authentication (should show your npm username)"
-          npm whoami
+      # - name: Verify npm authentication
+      #   run: |
+      #     echo "Checking npm authentication (should show your npm username)"
+      #     npm whoami
 
       - name: Publish to npm (via action)
         uses: JS-DevTools/npm-publish@v3
