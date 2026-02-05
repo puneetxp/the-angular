@@ -33,10 +33,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      # - name: Verify npm authentication
-      #   run: |
-      #     echo "Checking npm authentication (should show your npm username)"
-      #     npm whoami
+      - name: Debug OIDC availability
+        run: |
+          echo "ACTIONS_ID_TOKEN_REQUEST_URL present: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}"
+          echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN present: ${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+yes}"
+          # Do not print token values. Presence is enough for debugging.
+
+      - name: Verify npm authentication
+        run: |
+          echo "Running npm whoami to verify auth"
+          npm whoami
 
       - name: Publish to npm (via action)
         uses: JS-DevTools/npm-publish@v3
