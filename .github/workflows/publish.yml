@@ -5,12 +5,12 @@ on:
     tags:
       - 'v*'
     branches:
-      - main          # or whichever branch you use
+      - main
     paths:
       - '.github/workflows/publish.yml'
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write   # Required for OIDC
   contents: read
 
 jobs:
@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+          registry-url: 'https://registry.npmjs.org'   # <-- important
 
       - name: Remove temporary npmrc
         run: |
