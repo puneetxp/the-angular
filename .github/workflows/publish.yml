@@ -10,28 +10,36 @@ on:
       - '.github/workflows/publish.yml'
 
 permissions:
-  id-token: write   # Required for OIDC
+  id-token: write
   contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node and registry
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Verify npm authentication
-        run: npm whoami
-
-      - name: Publish to npm
         run: |
-          cd ../dist/the-angular
-          npm publish --provenance --access public
+          echo "Checking npm authentication (should show your npm username)"
+          npm whoami
+
+      - name: Publish to npm (via action)
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          provenance: true
+          access: public
