@@ -25,11 +25,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'   # <-- important
           always-auth: true # <-- ensures npm uses auth
 
-      - name: Remove temporary npmrc
-        run: |
-          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ] && [ -f "$NPM_CONFIG_USERCONFIG" ]; then
-            rm -f "$NPM_CONFIG_USERCONFIG"
-          fi
 
       - run: npm ci
       - run: npm run build
