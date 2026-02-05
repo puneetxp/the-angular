@@ -24,7 +24,7 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-
+ 
       - name: Publish to npm
         working-directory: dist/the-angular
         run: npm publish --provenance --access public
