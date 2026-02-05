@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - main          # or whichever branch you use
+    paths:
+      - '.github/workflows/publish.yml'
 
 permissions:
   id-token: write  # Required for OIDC
