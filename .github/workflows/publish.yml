@@ -39,4 +39,4 @@ jobs:
       - name: Publish to npm
         run: |
           cd ../dist/the-angular
-          npm publish
+          npm publish --provenance --access public
