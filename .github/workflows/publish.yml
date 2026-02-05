@@ -36,8 +36,8 @@ jobs:
         id: get_id_token
         run: |
           # request the OIDC id token from GitHub
-          # optionally add &audience= if npm docs require a specific audience
-          ID_TOKEN_RESPONSE=$(curl -s -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL")
+          # npm expects the audience claim to be "npm"
+          ID_TOKEN_RESPONSE=$(curl -s -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=npm")
           ID_TOKEN=$(echo "$ID_TOKEN_RESPONSE" | jq -r '.value')
           if [ -z "$ID_TOKEN" ] || [ "$ID_TOKEN" = "null" ]; then
             echo "Failed to extract id_token from OIDC response" >&2
@@ -50,13 +50,19 @@ jobs:
         run: |
           # Replace <NPM_EXCHANGE_URL> and payload per npm docs.
           # Example template (replace with exact endpoint & JSON structure from npm docs):
-          RESPONSE=$(curl -s -X POST \
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
             -H "Content-Type: application/json" \
             --data "{\"id_token\":\"${{ steps.get_id_token.outputs.id_token }}\"}" \
             "https://www.npmjs.com/api/tokens/exchange")
+          HTTP_STATUS=${RESPONSE##*$'\n'}
+          BODY=${RESPONSE%$'\n'*}
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "npm token exchange failed (status $HTTP_STATUS): $BODY" >&2
+            exit 1
+          fi
           # Parse the returned npm token name/value per npm docs; store token to $GITHUB_OUTPUT
-          # For example, if JSON returns { "token": "..." }:
-          echo "npm_token=$(echo "$RESPONSE" | jq -r '.token')" >> $GITHUB_OUTPUT
+          TOKEN=$(echo "$BODY" | jq -er '.token')
+          echo "npm_token=${TOKEN}" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
         working-directory: dist/the-angular
