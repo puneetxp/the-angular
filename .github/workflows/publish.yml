@@ -31,7 +31,8 @@ jobs:
 
       - name: Build
         run: npm run build
-
+        
       - name: Publish to npm
-        working-directory: the-angular/dist/the-angular
+        working-directory: dist/the-angular
         run: npm publish --provenance --access public
+
