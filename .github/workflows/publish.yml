@@ -28,6 +28,6 @@ jobs:
       - run: npm run build
 
       - name: Publish to npm
-        run: |
-          cd dist/the-angular
-          npm publish --provenance --access public
+        working-directory: dist/the-angular
+        run: npm publish --provenance --access public
+
