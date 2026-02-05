@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'   # <-- important
+          always-auth: true # <-- ensures npm uses auth
 
       - name: Remove temporary npmrc
         run: |
