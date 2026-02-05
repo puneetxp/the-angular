@@ -29,5 +29,5 @@ jobs:
 
       - name: Publish to npm
         run: |
-          cd the-angular/dist/the-angular
+          cd dist/the-angular
           npm publish --provenance --access public
