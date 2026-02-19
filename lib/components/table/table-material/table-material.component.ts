@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { TemplatePortal, CdkPortalOutlet } from '@angular/cdk/portal';
 import { CommonModule, NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -60,7 +60,7 @@ import { domain } from '../../../breakpoint';
         AsyncPipe,
     ]
 })
-export class TableMaterialComponent implements OnInit {
+export class TableMaterialComponent implements OnInit, OnChanges {
   @Input() columnsToDisplay!: string[];
   @Input() columnsToDisplayfilter: string[] = [];
   @Input() table_mat$!: Observable<any>;
@@ -73,22 +73,24 @@ export class TableMaterialComponent implements OnInit {
   @Input() photoResolver?: (id: number | string) => Observable<{ public?: string | null } | null>;
   @Input() isEnable = false;
   @Input() isEdit = false;
-  @Input() isexpandline = true;
+  @Input() buttons: {icon:string, callBack: (value:any) => void }[] = [];
   @Input() isPaginate = false;
   @Input() PageSize = 10;
-  @Input() hightlight$ !:{key:string,value: Observable<any>};
+  @Input() hightlight$ !:{key:string, value: Observable<any>};
   @Output() NodataOut = new EventEmitter();
   @Output() filters = new EventEmitter<Event>();
   @Output() selected = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   @Output() enable = new EventEmitter<any>();
   @Output() edit = new EventEmitter<any>();
+  @Output() listenButton = new EventEmitter<{key:string,value:any}>();
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   @ViewChild("templatePortalContent") templatePortalContent!: TemplateRef<unknown>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource: any;
   columnsToDisplayWithExpand!: string[];
+  columnsForList!: string[];
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   elementselected: any;
   templatePortal!: TemplatePortal<any>;
@@ -115,9 +117,21 @@ export class TableMaterialComponent implements OnInit {
       this._viewContainerRef,
     );
   }
+  ngOnChanges(_: SimpleChanges) {
+    this.buildColumns();
+  }
+
   ngOnInit() {
-    this.columnsToDisplayWithExpand = [...this.columnsToDisplay, "expand"];
     this.table_mat$.subscribe(i => { this.dataSource.data = i; });
-    this.columnsToDisplayfilter = this.columnsToDisplay.filter(i => i !== 'photo_id')
+    this.buildColumns();
+  }
+
+  private buildColumns() {
+    this.columnsToDisplayWithExpand = [...this.columnsToDisplay, "expand"];
+    this.columnsForList = [...this.columnsToDisplay];
+    if (this.buttons.length) {
+      this.columnsForList = [...this.columnsForList, 'actions'];
+    }
+    this.columnsToDisplayfilter = this.columnsToDisplay.filter(i => i !== 'photo_id');
   }
 }
